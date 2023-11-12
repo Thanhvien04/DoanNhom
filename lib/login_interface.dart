@@ -10,6 +10,8 @@ class Login_interface extends StatefulWidget {
   State<Login_interface> createState() => _Login_interfaceState();
 }
 
+bool _obscureText = true;
+
 class _Login_interfaceState extends State<Login_interface> {
   static Future<User?> loginUsingEmailPassword(
       {required String email,
@@ -93,6 +95,16 @@ class _Login_interfaceState extends State<Login_interface> {
                   decoration: InputDecoration(
                       filled: true,
                       labelText: "Enter Password",
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                        child: Icon(_obscureText
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                      ),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelStyle:
                           TextStyle(color: Colors.white.withOpacity(0.9)),
