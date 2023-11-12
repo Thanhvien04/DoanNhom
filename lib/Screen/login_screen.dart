@@ -90,6 +90,7 @@ class _Login_interfaceState extends State<Login_interface> {
                   height: 20,
                 ),
                 TextFormField(
+                  obscureText: true,
                   controller: _password,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(

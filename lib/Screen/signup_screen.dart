@@ -99,6 +99,7 @@ class _Signup_interfaceState extends State<Signup_interface> {
                   height: 20,
                 ),
                 TextFormField(
+                  obscureText: true,
                   controller: _passwordcontroller,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
