@@ -1,3 +1,5 @@
+import 'dart:ui';
+import 'login_screen.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -19,88 +21,85 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text("Profile",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25)),
+      body: SafeArea(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+            hexStringToColor("CB2B93"),
+            hexStringToColor("9546c4"),
+            hexStringToColor("5E66F6"),
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+          child: SingleChildScrollView(
+              child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Login_interface()));
+                },
+                child: const CircleAvatar(
+                  radius: 150,
+                  backgroundImage: AssetImage("asset/nha.png"),
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: hexStringToColor("BB3B93"),
+                    fixedSize: const Size(double.maxFinite, 50),
+                  ),
+                  child: const Text(
+                    "Username",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  )),
+              const SizedBox(
+                height: 40,
+              ),
+              ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: hexStringToColor("BB3B93"),
+                    fixedSize: Size(double.maxFinite, 50),
+                  ),
+                  child: const Text(
+                    "Phone",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  )),
+              const SizedBox(
+                height: 40,
+              ),
+              ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: hexStringToColor("BB3B93"),
+                    fixedSize: Size(double.maxFinite, 50),
+                  ),
+                  child: const Text(
+                    "Password",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  )),
+            ],
+          )),
         ),
-        backgroundColor: Colors.blue,
-      ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          hexStringToColor("CB2B93"),
-          hexStringToColor("9546c4"),
-          hexStringToColor("5E66F6"),
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-        child: SingleChildScrollView(
-            child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            const CircleAvatar(
-              radius: 120,
-              backgroundImage: AssetImage("asset/nha.png"),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-                onPressed: null,
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  fixedSize: Size(double.maxFinite, 50),
-                ),
-                child: const Text(
-                  "Username",
-                  style: TextStyle(
-                      color: Colors.amber,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                )),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-                onPressed: null,
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  fixedSize: Size(double.maxFinite, 50),
-                ),
-                child: const Text(
-                  "Phone",
-                  style: TextStyle(
-                      color: Colors.amber,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                )),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-                onPressed: null,
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  fixedSize: Size(double.maxFinite, 50),
-                ),
-                child: const Text(
-                  "Password",
-                  style: TextStyle(
-                      color: Colors.amber,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                )),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
-        )),
       ), //mã màu,
     );
   }
