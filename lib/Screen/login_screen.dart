@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screen.dart';
+import 'home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'signup_interface.dart';
+import 'signup_screen.dart';
 
 class Login_interface extends StatefulWidget {
   const Login_interface({super.key});
@@ -140,7 +140,7 @@ class _Login_interfaceState extends State<Login_interface> {
                       print(user);
                       if (user != null) {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const Screen()));
+                            builder: (context) => const Home_Screen()));
                       } else {
                         setState(() {
                           value = "Username or Password not Invalible !!";
