@@ -1,3 +1,4 @@
+import 'package:doan/Screen/Otp_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
@@ -131,10 +132,10 @@ class _Signup_interfaceState extends State<Signup_interface> {
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
-                      FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: _emailcontroller.text,
-                        password: _passwordcontroller.text,
-                      );
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OtpScreen()));
                     },
                     child: const Text(
                       "Sign Up",
