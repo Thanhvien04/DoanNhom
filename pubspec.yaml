@@ -38,6 +38,10 @@ dependencies:
   firebase_auth: ^4.13.0
   firebase_core: ^2.22.0
   pinput: ^3.0.1
+<<<<<<< HEAD
+=======
+
+>>>>>>> c56247823e975928df0bdd62a155922a8f5afebb
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -63,6 +67,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - asset/
+    - lib/icons/
  
 
   # An image asset can refer to one or more resolution-specific "variants", see

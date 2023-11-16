@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import 'package:doan/Screen/Otp_Screen.dart';
+import 'package:doan/Screen/home_screen.dart';
+>>>>>>> c56247823e975928df0bdd62a155922a8f5afebb
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Screen/profile.dart';

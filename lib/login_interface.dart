@@ -1,17 +1,38 @@
-import 'package:doan/Screen/Otp_Screen.dart';
+import 'package:doan/Screen/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'Screen/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'Screen/signup_screen.dart';
 
-class Signup_interface extends StatefulWidget {
-  const Signup_interface({super.key});
+class Login_interface extends StatefulWidget {
+  const Login_interface({super.key});
 
   @override
-  State<Signup_interface> createState() => _Signup_interfaceState();
+  State<Login_interface> createState() => _Login_interfaceState();
 }
 
-class _Signup_interfaceState extends State<Signup_interface> {
+class _Login_interfaceState extends State<Login_interface> {
+  static Future<User?> loginUsingEmailPassword(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      user = userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        print("No user found that email");
+      }
+    }
+    return user;
+  }
+
+  String value = '';
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
@@ -19,11 +40,6 @@ class _Signup_interfaceState extends State<Signup_interface> {
     }
     return Color(int.parse(hexColor, radix: 16));
   }
-
-  String kq = '';
-  final TextEditingController _emailcontroller = TextEditingController();
-  final TextEditingController _passwordcontroller = TextEditingController();
-  final TextEditingController _phonecontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,38 +61,11 @@ class _Signup_interfaceState extends State<Signup_interface> {
                 Image.asset(
                   "asset/nha.png",
                   fit: BoxFit.fitWidth,
-                  height: 300,
+                  height: 350,
                   width: 500,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
                 TextFormField(
-                  controller: _phonecontroller,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: "Enter Phone",
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.9)),
-                      fillColor: Colors.white.withOpacity(0.3),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: const BorderSide(
-                              width: 0,
-                              color: Colors.white,
-                              style: BorderStyle.none)),
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.white70,
-                      )),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _emailcontroller,
+                  controller: _email,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       filled: true,
@@ -100,8 +89,7 @@ class _Signup_interfaceState extends State<Signup_interface> {
                   height: 20,
                 ),
                 TextFormField(
-                  obscureText: true,
-                  controller: _passwordcontroller,
+                  controller: _password,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       filled: true,
@@ -121,25 +109,37 @@ class _Signup_interfaceState extends State<Signup_interface> {
                         color: Colors.white70,
                       )),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Text(
-                  kq,
+                  value,
                   style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold),
+                      color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
-                    onPressed: () {
-                      Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OtpScreen()));
+                    onPressed: () async {
+                      User? user = await loginUsingEmailPassword(
+                          email: _email.text,
+                          password: _password.text,
+                          context: context);
+                      print(user);
+                      if (user != null) {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => const Home_Screen()));
+                      } else {
+                        setState(() {
+                          value = "Username or Password not Invalible !!";
+                        });
+                        print("Username or Password not Invalible !!");
+                      }
+                      ;
                     },
                     child: const Text(
-                      "Sign Up",
+                      "Login",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -163,11 +163,11 @@ class _Signup_interfaceState extends State<Signup_interface> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Login_interface()));
+                                  builder: (context) => Signup_interface()));
                         },
                         child: RichText(
                           text: const TextSpan(
-                              text: "Log in",
+                              text: "Sign up",
                               style: TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,

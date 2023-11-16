@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:doan/util/smart_device_box.dart';
 import 'package:flutter/material.dart';
 
 class Home_Screen extends StatefulWidget {
@@ -10,130 +13,120 @@ class Home_Screen extends StatefulWidget {
 bool _isExpanded = true;
 
 class _Home_ScreenState extends State<Home_Screen> {
+  List mySmartDevices = [
+    ["SmartLight", "lib/icons/light.png", true],
+    ["SmartLight", "lib/icons/light.png", false],
+    ["SmartLight", "lib/icons/light.png", false],
+    ["SmartLight", "lib/icons/light.png", false],
+  ];
+  void powerSwitchChanged(bool value, int index) {
+    setState(() {
+      mySmartDevices[index][2] = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const Drawer(
-          child: ListTile(
-            leading: Icon(Icons.home),
-            title: Text("Home"),
-          ),
-        ),
-        body: Column(
+      backgroundColor: Colors.grey[300],
+      body: SafeArea(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
+            // app bar
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 40.0,
+                vertical: 15.0,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "THỐNG KÊ CHI TIÊU",
-                    style: Theme.of(context).textTheme.titleLarge,
+                  // menu icon
+                  Image.asset(
+                    'lib/icons/menu.png',
+                    height: 45,
+                    color: Colors.grey[800],
                   ),
-                  _isExpanded
-                      ? const Icon(
-                          Icons.expand_less,
-                          color: Colors.black,
-                          size: 22,
-                        )
-                      : const Icon(
-                          Icons.expand_more,
-                          color: Colors.black,
-                          size: 22,
-                        ),
+
+                  // account icon
+                  Icon(
+                    Icons.person,
+                    size: 45,
+                    color: Colors.grey[800],
+                  )
                 ],
               ),
             ),
-            const SizedBox(height: 7),
-            if (_isExpanded)
-              Container(
-                padding: const EdgeInsets.all(9),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Số lượng sản phẩm đã mua:",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 91, 99, 108),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "aaaaa",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                        "Số đơn hàng thành công:",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 91, 99, 108),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "bbbbb",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                        "Tổng chi tiêu:",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 91, 99, 108),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "12324123 VND",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+
+            const SizedBox(height: 20),
+
+            // welcome home
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Welcome Home,",
+                    style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
                   ),
+                  Text(
+                    'Quoc Bao',
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              child: Divider(
+                thickness: 1,
+                color: Color.fromARGB(255, 204, 204, 204),
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // smart devices grid
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              child: Text(
+                "Smart Devices",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.grey.shade800,
                 ),
-              )
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // grid
+            Expanded(
+              child: GridView.builder(
+                itemCount: 4,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1 / 1.3,
+                ),
+                itemBuilder: (context, index) {
+                  return SmartDeviceBox(
+                    smartDeviceName: mySmartDevices[index][0],
+                    iconPath: mySmartDevices[index][1],
+                    powerOn: mySmartDevices[index][2],
+                    onChanged: (value) => powerSwitchChanged(value, index),
+                  );
+                },
+              ),
+            )
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
