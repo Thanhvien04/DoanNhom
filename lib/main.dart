@@ -1,4 +1,6 @@
-
+import 'package:doan/Screen/home_screen.dart';
+import 'package:doan/Screen/profile_screen.dart';
+import 'package:doan/Screen/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -26,12 +28,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const Login_interface());
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const Home_Screen(),
+        '/profile': (context) => const Profile_Screen(),
+        '/login': (context) => const Login_interface(),
+        '/signup': (context) => const Signup_interface(),
+      },
+    );
   }
 }
