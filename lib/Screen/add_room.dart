@@ -8,8 +8,20 @@ class AddRoomScreen extends StatefulWidget {
 }
 
 class _AddRoomScreenState extends State<AddRoomScreen> {
+  TextEditingController txt_roomname = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Thêm phòng'),
+          backgroundColor: Colors.blue,
+        ),
+        body: const Column(
+          children: [
+            TextField(
+
+            )
+          ],
+        ));
   }
 }
