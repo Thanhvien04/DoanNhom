@@ -74,11 +74,11 @@ class _Home_ScreenState extends State<Home_Screen> {
                     ),
                   ],
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
+                child:  Padding(
+                  padding: const EdgeInsets.all(8),
+                  child:   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         "Số lượng sản phẩm đã mua:",
                         style: TextStyle(

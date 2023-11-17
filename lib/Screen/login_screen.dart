@@ -1,3 +1,4 @@
+import 'package:doan/Screen/forget_screen.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -104,7 +105,7 @@ class _Login_interfaceState extends State<Login_interface> {
                               color: Colors.white,
                               style: BorderStyle.none)),
                       prefixIcon: const Icon(
-                        Icons.person,
+                        Icons.lock,
                         color: Colors.white70,
                       )),
                 ),
@@ -116,6 +117,10 @@ class _Login_interfaceState extends State<Login_interface> {
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold),
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
+                
                 ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
@@ -137,6 +142,7 @@ class _Login_interfaceState extends State<Login_interface> {
                       }
                       ;
                     },
+                    
                     child: const Text(
                       "Login",
                       style: TextStyle(
@@ -144,6 +150,7 @@ class _Login_interfaceState extends State<Login_interface> {
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     )),
+                    forgetPassword(context),
                 Padding(
                   padding: const EdgeInsets.only(right: 30, top: 10),
                   child: Row(
@@ -181,6 +188,30 @@ class _Login_interfaceState extends State<Login_interface> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget forgetPassword(BuildContext context){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 20,
+      alignment: Alignment.bottomRight,
+      child:  InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ForgetPassword_Screen()));
+        },
+        child: RichText(
+          text: const TextSpan(
+              text: "Forget Password?",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16)),
+        ),
+      )
     );
   }
 }
