@@ -150,7 +150,8 @@ class _Login_interfaceState extends State<Login_interface> {
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     )),
-                    forgetPassword(context),
+                const SizedBox(height: 8,),
+                forgetPassword(context),
                 Padding(
                   padding: const EdgeInsets.only(right: 30, top: 10),
                   child: Row(
