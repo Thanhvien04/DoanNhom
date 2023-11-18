@@ -206,7 +206,7 @@ class _Login_interfaceState extends State<Login_interface> {
         },
         child: RichText(
           text: const TextSpan(
-              text: "Forget Password?",
+              text: "Forget Password",
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
