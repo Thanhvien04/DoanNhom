@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'dart:ui';
 
+import 'package:doan/Screen/home_screen.dart';
 import 'package:doan/models/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +9,16 @@ import 'package:flutter/material.dart';
 import '../models/room.dart';
 
 class defaultTabController extends StatefulWidget {
-  const defaultTabController({super.key});
-
+  defaultTabController(
+      {super.key,
+      required this.lst_room,
+      required this.lst_device,
+      required this.roomIsEmpty,
+      required this.callback});
+  final List<Room> lst_room;
+  final List<Device> lst_device;
+  final bool roomIsEmpty;
+  VoidCallback callback;
   @override
   State<defaultTabController> createState() => _defaultTabControllerState();
 }
@@ -17,25 +27,24 @@ const List<String> list = <String>[
   'Quạt',
   'Đèn',
 ];
-List<Device> lst_device = [
-  Device(id: 1, stt: false, name: 'Đèn', img: 'asset/light.png', id_room: 1),
-  Device(id: 2, stt: false, name: 'Đèn', img: 'asset/light.png', id_room: 1),
-  Device(id: 3, stt: false, name: 'Đèn', img: 'asset/light.png', id_room: 1),
-  Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 1),
-  Device(id: 1, stt: false, name: 'Quạt', img: 'asset/fan.png', id_room: 2),
-  Device(id: 2, stt: false, name: 'Quạt', img: 'asset/fan.png', id_room: 2),
-  Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 2),
-  Device(id: 1, stt: true, name: 'Đèn', img: 'asset/light.png', id_room: 3),
-  Device(id: 2, stt: true, name: 'Đèn', img: 'asset/light.png', id_room: 3),
-  Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 3),
-  Device(id: 1, stt: true, name: 'Quạt', img: 'asset/fan.png', id_room: 4),
-  Device(id: 2, stt: true, name: 'Quạt', img: 'asset/fan.png', id_room: 4),
-  Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 4),
-];
-List<Device> lst_device_bedroom = [];
-List<Device> lst_device_livingroom = [];
-List<Device> lst_device_bathroom = [];
-List<Device> lst_device_kitchen = [];
+
+Device addThem(int? idroom) {
+  Device them = Device(
+      id: 0,
+      stt: false,
+      name: 'Thêm',
+      img: 'asset/daucong.png',
+      id_room: idroom);
+  return them;
+}
+
+List<Device> addListDevice(int id_room) {
+  List<Device> lst = [];
+  lst.add(addThem(id_room));
+  return lst;
+}
+
+bool sttRoom = true;
 bool stt_build_fisrt = false;
 hexStringToColor(String hexColor) {
   hexColor = hexColor.toUpperCase().replaceAll("#", "");
@@ -48,49 +57,111 @@ hexStringToColor(String hexColor) {
 class _defaultTabControllerState extends State<defaultTabController> {
   bool switchValue = true;
   String val = list.first;
+  void stt() {
+    setState(() {
+      sttRoom = roomIsEmpty;
+    });
+  }
+
+  void addDevice(int? id_room) {
+    setState(() {
+      for (var item in widget.lst_room) {
+        if (item.id == id_room) {
+          Device dv = Device(
+              id: item.lstDevice.length,
+              stt: false,
+              name: val,
+              img: val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
+              id_room: item.id);
+          item.lstDevice.add(dv);
+        }
+      }
+    });
+  }
+
+  void loadRoom() {
+    if (widget.lst_room.isNotEmpty) {
+      for (var item in widget.lst_room) {
+        if (item.lstDevice.length > 1) {
+          item.lstDevice.removeAt(getIndex0(item.lstDevice));
+          item.lstDevice.add(addThem(item.lstDevice[0].id_room));
+        } else {
+          item.lstDevice = addListDevice(item.id);
+        }
+      }
+      roomIsEmpty = false;
+    } else {
+      roomIsEmpty = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width / 2;
     var height = MediaQuery.of(context).size.height;
+    TextEditingController txt_RoomName = TextEditingController();
+    stt();
+    print('số phòng bên defau ${widget.lst_room.length}');
+    loadRoom();
 
-    lst_device_livingroom =
-        lst_device.where((element) => element.id_room == 1).toList();
-    lst_device_kitchen =
-        lst_device.where((element) => element.id_room == 2).toList();
-    lst_device_bedroom =
-        lst_device.where((element) => element.id_room == 3).toList();
-    lst_device_bathroom =
-        lst_device.where((element) => element.id_room == 4).toList();
-    List<Room> lstRoom = [
-      Room(id: 1, lstDevice: lst_device_livingroom, name: 'Phòng khách'),
-      Room(id: 2, lstDevice: lst_device_kitchen, name: 'Phòng bếp'),
-      Room(id: 3, lstDevice: lst_device_bedroom, name: 'Phòng ngủ'),
-      Room(id: 4, lstDevice: lst_device_bathroom, name: 'Phòng tắm'),
-    ];
-    return DefaultTabController(
-        length: lstRoom.length,
-        child: Column(children: [
-          TabBar(
-            tabs: lstRoom.map((e) => Text(e.name)).toList(),
-            isScrollable: true,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              hexStringToColor("CB2B93"),
-              hexStringToColor("9546c4"),
-              hexStringToColor("5E66F6"),
-            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-            height: 350,
-            child: TabBarView(children: [
-              room(lstRoom[0]),
-              room(lstRoom[1]),
-              room(lstRoom[2]),
-              room(lstRoom[3]),
-            ]),
+    return sttRoom
+        ? SizedBox(
+            width: MediaQuery.of(context).size.width / 2.7,
+            height: MediaQuery.of(context).size.height / 6,
+            // child: MaterialButton(
+            //   height: 40,
+            //   onPressed: () => showDialog<String>(
+            //     context: context,
+            //     builder: (BuildContext context) => AlertDialog(
+            //       title: const Text('Thêm phòng'),
+            //       content: TextField(
+            //         controller: txt_RoomName,
+            //         decoration: const InputDecoration(
+            //           labelText: "Nhập tên phòng",
+            //         ),
+            //       ),
+            //       actions: <Widget>[
+            //         TextButton(
+            //           onPressed: () {
+            //             setState(() {
+            //               if (txt_RoomName.text.isNotEmpty) {
+            //                 widget.lst_room.add(Room(
+            //                     id: widget.lst_room.length,
+            //                     lstDevice:
+            //                         addListDevice(widget.lst_room.length),
+            //                     name: txt_RoomName.text));
+            //               }
+            //               print("dèaaa${widget.lst_room.length}");
+            //             });
+            //           },
+            //           child: const Text('Thêm'),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            //   color: Colors.blue,
+            //   child: const Text('Thêm phòng'),
+            // ),
           )
-        ]));
+        : DefaultTabController(
+            length: widget.lst_room.length,
+            child: Column(children: [
+              TabBar(
+                tabs: widget.lst_room.map((e) => Text(e.name)).toList(),
+                isScrollable: true,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  hexStringToColor("CB2B93"),
+                  hexStringToColor("9546c4"),
+                  hexStringToColor("5E66F6"),
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+                height: 350,
+                child: TabBarView(
+                    children: widget.lst_room.map((e) => room(e)).toList()),
+              )
+            ]));
   }
 
   GridView room(Room room) {
@@ -119,7 +190,7 @@ class _defaultTabControllerState extends State<defaultTabController> {
                 });
               },
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
                       height: 70,
@@ -140,7 +211,7 @@ class _defaultTabControllerState extends State<defaultTabController> {
                         child: Text(
                           device.name,
                           style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       )),
                       CupertinoSwitch(
@@ -210,7 +281,10 @@ class _defaultTabControllerState extends State<defaultTabController> {
                               height: 30,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                print(widget.lst_device.length);
+                                addDevice(device.id_room);
+                              },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue),
                               child: const Text(

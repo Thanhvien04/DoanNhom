@@ -1,4 +1,3 @@
-import 'package:doan/Screen/add_room.dart';
 import 'package:doan/Screen/home_screen.dart';
 import 'package:doan/Screen/profile_screen.dart';
 import 'package:doan/Screen/signup_screen.dart';
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => const Profile_Screen(),
         '/login': (context) => const Login_interface(),
         '/signup': (context) => const Signup_interface(),
-        '/addroom': (context) => const AddRoomScreen(),
+        //'/addroom': (context) => const AddRoomScreen(),
       },
     );
   }

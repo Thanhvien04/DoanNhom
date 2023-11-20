@@ -3,7 +3,7 @@ class Device {
   bool stt;
   String name;
   String img;
-  int id_room;
+  int? id_room;
   Device(
       {required this.id,
       required this.stt,
