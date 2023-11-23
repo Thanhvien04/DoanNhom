@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:doan/Screen/home_screen.dart';
 import 'package:doan/models/device.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +13,9 @@ class defaultTabController extends StatefulWidget {
   defaultTabController(
       {super.key,
       required this.lst_room,
-      required this.lst_device,
       required this.roomIsEmpty,
       required this.callback});
   final List<Room> lst_room;
-  final List<Device> lst_device;
   final bool roomIsEmpty;
   VoidCallback callback;
   @override
@@ -56,6 +55,7 @@ hexStringToColor(String hexColor) {
 
 class _defaultTabControllerState extends State<defaultTabController> {
   bool switchValue = true;
+
   String val = list.first;
   void stt() {
     setState(() {
@@ -63,32 +63,88 @@ class _defaultTabControllerState extends State<defaultTabController> {
     });
   }
 
-  void addDevice(int? id_room) {
-    setState(() {
-      for (var item in widget.lst_room) {
-        if (item.id == id_room) {
-          Device dv = Device(
-              id: item.lstDevice.length,
-              stt: false,
-              name: val,
-              img: val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
-              id_room: item.id);
-          item.lstDevice.add(dv);
+  Future<void> addDevice(int? id_room) async {
+    int i;
+    final response = await FirebaseDatabase.instance.ref().child("room").get();
+    for (DataSnapshot room in response.children) {
+      if (int.parse(room.child("id").value.toString()) == id_room) {
+        var lst_device = [];
+        for (i = 0; i < room.child("lstDevice").children.length; i++) {
+          var dv1 = {
+            "id": int.parse(room
+                .child("lstDevice")
+                .child("$i")
+                .child("id")
+                .value
+                .toString()),
+            "stt": bool.parse(room
+                .child("lstDevice")
+                .child("$i")
+                .child("stt")
+                .value
+                .toString()),
+            "name": room
+                .child("lstDevice")
+                .child("$i")
+                .child("name")
+                .value
+                .toString(),
+            "img": room
+                .child("lstDevice")
+                .child("$i")
+                .child("img")
+                .value
+                .toString(),
+            "id_room": int.parse(room
+                .child("lstDevice")
+                .child("$i")
+                .child("id_room")
+                .value
+                .toString())
+          };
+
+          lst_device.add(dv1);
         }
+        var dv = {
+          "id": room.child("lstDevice").children.length,
+          "stt": false,
+          "name": val,
+          "img": val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
+          "id_room": int.parse(room.child("id").value.toString()),
+        };
+        setState(() {
+          lst_device.add(dv);
+        });
+        // var item=lst_device[0];
+        // lst_device[0]= lst_device[lst_device.length-1];
+        // lst_device[lst_device.length-1]=item;
+        var ref =
+            await FirebaseDatabase.instance.ref().child("room/${id_room}");
+        ref.child("lstDevice").set(lst_device).then((lstdevice) {
+          print('Thêm thiết bị thành công');
+        }).catchError((onError) {
+          print('Thêm thiết bị không thành công');
+        });
       }
-    });
+    }
+    // setState(() {
+    //   for (var item in widget.lst_room) {
+    //     if (item.id == id_room) {
+    //       Device dv = Device(
+    //         id: item.lstDevice.length,
+    //         stt: false,
+    //         name: val,
+    //         img: val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
+    //         id_room: item.id,
+    //       );
+    //       item.lstDevice.add(dv);
+    //     }
+    //   }
+    // });
   }
 
   void loadRoom() {
     if (widget.lst_room.isNotEmpty) {
-      for (var item in widget.lst_room) {
-        if (item.lstDevice.length > 1) {
-          item.lstDevice.removeAt(getIndex0(item.lstDevice));
-          item.lstDevice.add(addThem(item.lstDevice[0].id_room));
-        } else {
-          item.lstDevice = addListDevice(item.id);
-        }
-      }
       roomIsEmpty = false;
     } else {
       roomIsEmpty = true;
@@ -101,47 +157,11 @@ class _defaultTabControllerState extends State<defaultTabController> {
     var height = MediaQuery.of(context).size.height;
     TextEditingController txt_RoomName = TextEditingController();
     stt();
-    print('số phòng bên defau ${widget.lst_room.length}');
     loadRoom();
-
-    return sttRoom
+    return roomIsEmpty
         ? SizedBox(
             width: MediaQuery.of(context).size.width / 2.7,
             height: MediaQuery.of(context).size.height / 6,
-            // child: MaterialButton(
-            //   height: 40,
-            //   onPressed: () => showDialog<String>(
-            //     context: context,
-            //     builder: (BuildContext context) => AlertDialog(
-            //       title: const Text('Thêm phòng'),
-            //       content: TextField(
-            //         controller: txt_RoomName,
-            //         decoration: const InputDecoration(
-            //           labelText: "Nhập tên phòng",
-            //         ),
-            //       ),
-            //       actions: <Widget>[
-            //         TextButton(
-            //           onPressed: () {
-            //             setState(() {
-            //               if (txt_RoomName.text.isNotEmpty) {
-            //                 widget.lst_room.add(Room(
-            //                     id: widget.lst_room.length,
-            //                     lstDevice:
-            //                         addListDevice(widget.lst_room.length),
-            //                     name: txt_RoomName.text));
-            //               }
-            //               print("dèaaa${widget.lst_room.length}");
-            //             });
-            //           },
-            //           child: const Text('Thêm'),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            //   color: Colors.blue,
-            //   child: const Text('Thêm phòng'),
-            // ),
           )
         : DefaultTabController(
             length: widget.lst_room.length,
@@ -176,6 +196,7 @@ class _defaultTabControllerState extends State<defaultTabController> {
   }
 
   Container device(Device device) {
+    bool _va = device.stt;
     return device.id != 0
         ? Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -185,8 +206,13 @@ class _defaultTabControllerState extends State<defaultTabController> {
                 borderRadius: BorderRadius.circular(20), color: Colors.white38),
             child: TextButton(
               onPressed: () {
-                setState(() {
-                  device.stt = !device.stt;
+                var ref = FirebaseDatabase.instance
+                    .ref()
+                    .child("room/${device.id_room}/lstDevice");
+                ref.child("${device.id}").update({"stt": !_va}).then((value) {
+                  print("Dổi trạng thái nút thành công1");
+                }).catchError((onError) {
+                  print("Dổi trạng thái nút không thành công thành côn1");
                 });
               },
               child: Column(
@@ -217,8 +243,16 @@ class _defaultTabControllerState extends State<defaultTabController> {
                       CupertinoSwitch(
                         value: device.stt,
                         onChanged: (bool value) {
-                          setState(() {
-                            device.stt = value;
+                          var ref = FirebaseDatabase.instance
+                              .ref()
+                              .child("room/${device.id_room}");
+                          ref
+                              .child("lstDevice/${device.id}")
+                              .update({"stt": value}).then((value) {
+                            print("Dổi trạng thái nút thành công");
+                          }).catchError((onError) {
+                            print(
+                                "Dổi trạng thái nút không thành công thành công");
                           });
                         },
                       ),
@@ -282,7 +316,6 @@ class _defaultTabControllerState extends State<defaultTabController> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                print(widget.lst_device.length);
                                 addDevice(device.id_room);
                               },
                               style: ElevatedButton.styleFrom(

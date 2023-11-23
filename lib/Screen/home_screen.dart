@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:doan/widget/DefaultTabController.dart';
 import 'package:doan/widget/bottomnaviga.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 import '../models/device.dart';
 import '../models/room.dart';
 
@@ -13,6 +17,7 @@ class Home_Screen extends StatefulWidget {
   State<Home_Screen> createState() => _Home_ScreenState();
 }
 
+//DatabaseReference ref = FirebaseDatabase.instance.ref();
 bool _isExpanded = true;
 hexStringToColor(String hexColor) {
   hexColor = hexColor.toUpperCase().replaceAll("#", "");
@@ -24,45 +29,8 @@ hexStringToColor(String hexColor) {
 
 bool roomIsEmpty = true;
 TextEditingController txt_RoomName = TextEditingController();
-List<Device> lstDevice = [
-  // Device(id: 1, stt: false, name: 'Đèn', img: 'asset/light.png', id_room: 1),
-  // Device(id: 2, stt: false, name: 'Đèn', img: 'asset/light.png', id_room: 1),
-  // Device(id: 3, stt: false, name: 'Đèn', img: 'asset/light.png', id_room: 1),
-  // Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 1),
-  // Device(id: 1, stt: false, name: 'Quạt', img: 'asset/fan.png', id_room: 2),
-  // Device(id: 2, stt: false, name: 'Quạt', img: 'asset/fan.png', id_room: 2),
-  // Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 2),
-  // Device(id: 1, stt: true, name: 'Đèn', img: 'asset/light.png', id_room: 3),
-  // Device(id: 2, stt: true, name: 'Đèn', img: 'asset/light.png', id_room: 3),
-  // Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 3),
-  // Device(id: 1, stt: true, name: 'Quạt', img: 'asset/fan.png', id_room: 4),
-  // Device(id: 2, stt: true, name: 'Quạt', img: 'asset/fan.png', id_room: 4),
-  // Device(id: 0, stt: false, name: 'Thêm', img: 'asset/daucong.png', id_room: 4),
-];
-
-List<Room> lstRoom = [
-  // Room(id: 1, lstDevice: lst_device_livingroom, name: 'Phòng khách'),
-  // Room(id: 2, lstDevice: lst_device_kitchen, name: 'Phòng bếp'),
-  // Room(id: 3, lstDevice: lst_device_bedroom, name: 'Phòng ngủ'),
-  // Room(id: 4, lstDevice: lst_device_bathroom, name: 'Phòng tắm'),
-];
-// lst_device_livingroom =
-//     lst_device.where((element) => element.id_room == 1).toList();
-// lst_device_livingroom.removeAt(getIndex0(lst_device_livingroom));
-// lst_device_livingroom.add(addThem(lst_device_livingroom[0].id_room));
-// lst_device_kitchen =
-//     lst_device.where((element) => element.id_room == 2).toList();
-// lst_device_kitchen.removeAt(getIndex0(lst_device_kitchen));
-// lst_device_kitchen.add(addThem(lst_device_kitchen[0].id_room));
-// lst_device_bedroom =
-//     lst_device.where((element) => element.id_room == 3).toList();
-// lst_device_bedroom.removeAt(getIndex0(lst_device_bedroom));
-// lst_device_bedroom.add(addThem(lst_device_bedroom[0].id_room));
-
-// lst_device_bathroom =
-//     lst_device.where((element) => element.id_room == 4).toList();
-// lst_device_bathroom.removeAt(getIndex0(lst_device_bathroom));
-// lst_device_bathroom.add(addThem(lst_device_bathroom[0].id_room));
+List<Room> lstRoom = [];
+List<Room> lstRoom_sort = [];
 int getIndex0(List<Device> lst) {
   int index = 0;
   Device dv;
@@ -80,22 +48,6 @@ List<Device> addListDevice(int idRoom) {
   return lst;
 }
 
-void loadRoom() {
-  if (lstRoom.isNotEmpty) {
-    for (var item in lstRoom) {
-      if (item.lstDevice.length > 1) {
-        item.lstDevice.removeAt(getIndex0(item.lstDevice));
-        item.lstDevice.add(addThem(item.lstDevice[0].id_room));
-      } else {
-        item.lstDevice = addListDevice(item.id);
-      }
-    }
-    roomIsEmpty = false;
-  } else {
-    roomIsEmpty = true;
-  }
-}
-
 // ignore: camel_case_types
 class _Home_ScreenState extends State<Home_Screen> {
   double _currentSliderValue = 20;
@@ -108,51 +60,129 @@ class _Home_ScreenState extends State<Home_Screen> {
     loadRoom();
   }
 
-  void addRoom(Room room) {
-    setState(() {
-      // var list_device = [];
-      // room.lstDevice.forEach((device) {
-      //   var _device = {
-      //     "id": device.id,
-      //     "stt":device.stt,
-      //     "name":device.name
-      //   };
-      // });
+  Future<void> turnOffAllLights() async {
+    lstRoom.forEach((room) {
+      room.lstDevice.forEach((device) {
+        if (device.name == "Đèn") {
+          device.stt = false;
+        }
+      });
+    });
+    upLoadRoom();
+  }
 
-      lstRoom.add(room);
-      //lstDevice.add(room.lstDevice[0]);
+  Future<void> upLoadRoom() async {
+    lstRoom.forEach((room) async {
+      var lst_device = [];
+      room.lstDevice.forEach(
+        (device) {
+          var dv = {
+            "id": device.id,
+            "stt": device.stt,
+            "name": device.name,
+            "img": device.img,
+            "id_room": device.id_room
+          };
+          lst_device.add(dv);
+        },
+      );
+      var ref = await FirebaseDatabase.instance.ref().child("room/${room.id}");
+      ref.child("lstDevice").set(lst_device).then((lstdevice) {
+        print('Upload phòng ${room.name} thành công');
+      }).catchError((onError) {
+        print('Upload phòng ${room.name} không thành công');
+      });
     });
   }
 
-  void printCount() {
-    print("build $count");
+  Future<void> loadRoom() async {
+    int i;
+    List<Room> lst_room = [];
+    final response = await FirebaseDatabase.instance.ref().child("room").get();
+    for (DataSnapshot room in response.children) {
+      List<Device> lst_device = [];
+      for (i = 0; i < room.child("lstDevice").children.length; i++) {
+        Device dv = Device(
+            id: int.parse(room
+                .child("lstDevice")
+                .child("$i")
+                .child("id")
+                .value
+                .toString()),
+            stt: bool.parse(room
+                .child("lstDevice")
+                .child("$i")
+                .child("stt")
+                .value
+                .toString()),
+            name: room
+                .child("lstDevice")
+                .child("$i")
+                .child("name")
+                .value
+                .toString(),
+            img: room
+                .child("lstDevice")
+                .child("$i")
+                .child("img")
+                .value
+                .toString(),
+            id_room: int.parse(room
+                .child("lstDevice")
+                .child("$i")
+                .child("id_room")
+                .value
+                .toString()));
+        lst_device.add(dv);
+      }
+      Room roomnew = Room(
+          id: int.parse(room.child('id').value.toString()),
+          lstDevice: lst_device,
+          name: room.child('name').value.toString());
+      lst_room.add(roomnew);
+    }
+    setState(() {
+      lstRoom = lst_room;
+    });
+
+    if (lstRoom_sort.isNotEmpty) {
+      roomIsEmpty = false;
+    } else {
+      roomIsEmpty = true;
+    }
   }
 
-  int count = 0;
+  void addRoom(Room room) {
+    setState(() {
+      var list_device = [];
+      room.lstDevice.forEach((device) {
+        var _device = {
+          "id": device.id.toString(),
+          "stt": device.stt.toString(),
+          "name": device.name,
+          "img": device.img,
+          "id_room": device.id_room.toString(),
+        };
+        list_device.add(_device);
+      });
+      var _room = {
+        "name": room.name,
+        "lstDevice": list_device,
+        "id": room.id,
+      };
+
+      var ref = FirebaseDatabase.instance.ref().child("room");
+      ref.child(room.id.toString()).set(_room).then((room) {
+        print('Thêm thành công');
+      }).catchError((onError) {
+        print('Thêm không thành công');
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     loadRoom();
-
-    count++;
-    printCount();
-    print("số phòng bên home ${lstRoom.length}");
-
-    Device addThem(int? idroom) {
-      Device them = Device(
-          id: 0,
-          stt: false,
-          name: 'Thêm',
-          img: 'asset/daucong.png',
-          id_room: idroom);
-      return them;
-    }
-
-    List<Device> addListDevice(int idRoom) {
-      List<Device> lst = [];
-      lst.add(addThem(idRoom));
-      return lst;
-    }
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Trang chủ'),
@@ -164,7 +194,6 @@ class _Home_ScreenState extends State<Home_Screen> {
         body: SingleChildScrollView(
           child: Column(children: [
             defaultTabController(
-              lst_device: lstDevice,
               lst_room: lstRoom,
               roomIsEmpty: roomIsEmpty,
               callback: () {},
@@ -192,15 +221,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                         child: MaterialButton(
                           height: 40,
                           onPressed: () {
-                            setState(() {
-                              lstRoom.forEach((room) {
-                                room.lstDevice.forEach((device) {
-                                  if (device.name == 'Đèn') {
-                                    device.stt = false;
-                                  }
-                                });
-                              });
-                            });
+                            turnOffAllLights();
                           },
                           color: Colors.blue,
                           child: const Text('Tắt hết đèn'),
@@ -225,9 +246,9 @@ class _Home_ScreenState extends State<Home_Screen> {
                                   onPressed: () {
                                     if (txt_RoomName.text.isNotEmpty) {
                                       addRoom(Room(
-                                          id: lstRoom.length,
-                                          lstDevice:
-                                              addListDevice(lstRoom.length),
+                                          id: lstRoom_sort.length,
+                                          lstDevice: addListDevice(
+                                              lstRoom_sort.length),
                                           name: txt_RoomName.text));
                                       roomIsEmpty = false;
                                     }
@@ -244,7 +265,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width / 2.2,
                   child: Column(children: [
                     const Text('Tốc độ quạt'),
