@@ -33,7 +33,8 @@ Device addThem(int? idroom) {
       stt: false,
       name: 'Thêm',
       img: 'asset/daucong.png',
-      id_room: idroom);
+      id_room: idroom,
+      delete: false);
   return them;
 }
 
@@ -65,6 +66,7 @@ class _defaultTabControllerState extends State<defaultTabController> {
 
   Future<void> addDevice(int? id_room) async {
     int i;
+    bool flag = false;
     final response = await FirebaseDatabase.instance.ref().child("room").get();
     for (DataSnapshot room in response.children) {
       if (int.parse(room.child("id").value.toString()) == id_room) {
@@ -100,21 +102,39 @@ class _defaultTabControllerState extends State<defaultTabController> {
                 .child("$i")
                 .child("id_room")
                 .value
+                .toString()),
+            "delete": bool.parse(room
+                .child("lstDevice")
+                .child("$i")
+                .child("delete")
+                .value
                 .toString())
           };
-
           lst_device.add(dv1);
         }
-        var dv = {
-          "id": room.child("lstDevice").children.length,
-          "stt": false,
-          "name": val,
-          "img": val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
-          "id_room": int.parse(room.child("id").value.toString()),
-        };
-        setState(() {
-          lst_device.add(dv);
+        lst_device.forEach((device) {
+          if (device["delete"] == true) {
+            if (device["name"] == val) {
+              if (!flag) {
+                device["delete"] = false.toString();
+                flag = true;
+              }
+            }
+          }
         });
+        if (!flag) {
+          var dv = {
+            "id": room.child("lstDevice").children.length,
+            "stt": false,
+            "name": val,
+            "img": val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
+            "id_room": int.parse(room.child("id").value.toString()),
+            "delete": false
+          };
+          setState(() {
+            lst_device.add(dv);
+          });
+        }
         // var item=lst_device[0];
         // lst_device[0]= lst_device[lst_device.length-1];
         // lst_device[lst_device.length-1]=item;
@@ -122,8 +142,10 @@ class _defaultTabControllerState extends State<defaultTabController> {
             await FirebaseDatabase.instance.ref().child("room/${id_room}");
         ref.child("lstDevice").set(lst_device).then((lstdevice) {
           print('Thêm thiết bị thành công');
+          flag = false;
         }).catchError((onError) {
           print('Thêm thiết bị không thành công');
+          flag = false;
         });
       }
     }
@@ -204,62 +226,88 @@ class _defaultTabControllerState extends State<defaultTabController> {
             height: 180,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20), color: Colors.white38),
-            child: TextButton(
-              onPressed: () {
-                var ref = FirebaseDatabase.instance
-                    .ref()
-                    .child("room/${device.id_room}/lstDevice");
-                ref.child("${device.id}").update({"stt": !_va}).then((value) {
-                  print("Dổi trạng thái nút thành công1");
-                }).catchError((onError) {
-                  print("Dổi trạng thái nút không thành công thành côn1");
-                });
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: device.stt ? Colors.white70 : Colors.transparent,
-                      ),
-                      child: Image.asset(
-                        device.img,
-                        height: 65,
-                      )),
-                  Row(
+            child: Stack(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    var ref = FirebaseDatabase.instance
+                        .ref()
+                        .child("room/${device.id_room}/lstDevice");
+                    ref
+                        .child("${device.id}")
+                        .update({"stt": !_va}).then((value) {
+                      print("Dổi trạng thái nút thành công1");
+                    }).catchError((onError) {
+                      print("Dổi trạng thái nút không thành công thành côn1");
+                    });
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Expanded(
-                          child: Padding(
-                        padding: const EdgeInsets.only(left: 25.0),
-                        child: Text(
-                          device.name,
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                      CupertinoSwitch(
-                        value: device.stt,
-                        onChanged: (bool value) {
-                          var ref = FirebaseDatabase.instance
-                              .ref()
-                              .child("room/${device.id_room}");
-                          ref
-                              .child("lstDevice/${device.id}")
-                              .update({"stt": value}).then((value) {
-                            print("Dổi trạng thái nút thành công");
-                          }).catchError((onError) {
-                            print(
-                                "Dổi trạng thái nút không thành công thành công");
-                          });
-                        },
+                      Container(
+                          height: 70,
+                          width: 70,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: device.stt
+                                ? Colors.white70
+                                : Colors.transparent,
+                          ),
+                          child: Image.asset(
+                            device.img,
+                            height: 65,
+                          )),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.only(left: 25.0),
+                            child: Text(
+                              device.name,
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                          CupertinoSwitch(
+                            value: device.stt,
+                            onChanged: (bool value) {
+                              var ref = FirebaseDatabase.instance
+                                  .ref()
+                                  .child("room/${device.id_room}");
+                              ref
+                                  .child("lstDevice/${device.id}")
+                                  .update({"stt": value}).then((value) {
+                                print("Dổi trạng thái nút thành công");
+                              }).catchError((onError) {
+                                print(
+                                    "Dổi trạng thái nút không thành công thành công");
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          var delete = FirebaseDatabase.instance
+                              .ref()
+                              .child(
+                                  'room/${device.id_room}/lstDevice/${device.id}')
+                              .update({"delete": true}).then((value) {
+                            print("Xóa thành công");
+                          }).catchError((onError) {
+                            print('Xóa không thành công');
+                          });
+                        },
+                        icon: const Icon(Icons.close)),
+                  ],
+                ),
+              ],
             ))
         : Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

@@ -81,7 +81,8 @@ class _Home_ScreenState extends State<Home_Screen> {
             "stt": device.stt,
             "name": device.name,
             "img": device.img,
-            "id_room": device.id_room
+            "id_room": device.id_room,
+            "delete": device.delete
           };
           lst_device.add(dv);
         },
@@ -102,38 +103,51 @@ class _Home_ScreenState extends State<Home_Screen> {
     for (DataSnapshot room in response.children) {
       List<Device> lst_device = [];
       for (i = 0; i < room.child("lstDevice").children.length; i++) {
-        Device dv = Device(
-            id: int.parse(room
+        if (room
                 .child("lstDevice")
-                .child("$i")
-                .child("id")
-                .value
-                .toString()),
-            stt: bool.parse(room
-                .child("lstDevice")
-                .child("$i")
-                .child("stt")
-                .value
-                .toString()),
-            name: room
-                .child("lstDevice")
-                .child("$i")
-                .child("name")
-                .value
-                .toString(),
-            img: room
-                .child("lstDevice")
-                .child("$i")
-                .child("img")
-                .value
-                .toString(),
-            id_room: int.parse(room
-                .child("lstDevice")
-                .child("$i")
-                .child("id_room")
-                .value
-                .toString()));
-        lst_device.add(dv);
+                .child("$i").child("delete")
+                .value.toString() ==
+            false.toString()) {
+          Device dv = Device(
+              id: int.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("id")
+                  .value
+                  .toString()),
+              stt: bool.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("stt")
+                  .value
+                  .toString()),
+              name: room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("name")
+                  .value
+                  .toString(),
+              img: room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("img")
+                  .value
+                  .toString(),
+              id_room: int.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("id_room")
+                  .value
+                  .toString()),
+              delete: bool.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("delete")
+                  .value
+                  .toString()));
+
+          lst_device.add(dv);
+        }
       }
       Room roomnew = Room(
           id: int.parse(room.child('id').value.toString()),
@@ -162,6 +176,7 @@ class _Home_ScreenState extends State<Home_Screen> {
           "name": device.name,
           "img": device.img,
           "id_room": device.id_room.toString(),
+          "delete": false.toString()
         };
         list_device.add(_device);
       });
@@ -246,9 +261,9 @@ class _Home_ScreenState extends State<Home_Screen> {
                                   onPressed: () {
                                     if (txt_RoomName.text.isNotEmpty) {
                                       addRoom(Room(
-                                          id: lstRoom_sort.length,
+                                          id: lstRoom.length,
                                           lstDevice: addListDevice(
-                                              lstRoom_sort.length),
+                                              lstRoom.length),
                                           name: txt_RoomName.text));
                                       roomIsEmpty = false;
                                     }
