@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'forget_screen.dart';
 import 'home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_screen.dart';
 
-class Login_interface extends StatefulWidget {
-  const Login_interface({super.key});
+class Login_screen extends StatefulWidget {
+  const Login_screen({super.key});
 
   @override
-  State<Login_interface> createState() => _Login_interfaceState();
+  State<Login_screen> createState() => _Login_screenState();
 }
 
-class _Login_interfaceState extends State<Login_interface> {
-  static Future<User?> loginUsingEmailPassword(
+class _Login_screenState extends State<Login_screen> {
+static Future<User?> loginUsingEmailPassword(
       {required String email,
       required String password,
       required BuildContext context}) async {
@@ -104,7 +105,7 @@ class _Login_interfaceState extends State<Login_interface> {
                               color: Colors.white,
                               style: BorderStyle.none)),
                       prefixIcon: const Icon(
-                        Icons.person,
+                        Icons.lock,
                         color: Colors.white70,
                       )),
                 ),
@@ -116,6 +117,10 @@ class _Login_interfaceState extends State<Login_interface> {
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold),
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
+                
                 ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
@@ -137,6 +142,7 @@ class _Login_interfaceState extends State<Login_interface> {
                       }
                       ;
                     },
+                    
                     child: const Text(
                       "Login",
                       style: TextStyle(
@@ -144,6 +150,8 @@ class _Login_interfaceState extends State<Login_interface> {
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     )),
+                const SizedBox(height: 8,),
+                forgetPassword(context),
                 Padding(
                   padding: const EdgeInsets.only(right: 30, top: 10),
                   child: Row(
@@ -162,7 +170,7 @@ class _Login_interfaceState extends State<Login_interface> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Signup_interface()));
+                                  builder: (context) => const Signup_screen()));
                         },
                         child: RichText(
                           text: const TextSpan(
@@ -181,6 +189,30 @@ class _Login_interfaceState extends State<Login_interface> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget forgetPassword(BuildContext context){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 20,
+      alignment: Alignment.bottomRight,
+      child:  InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ForgetPassword_Screen()));
+        },
+        child: RichText(
+          text: const TextSpan(
+              text: "Forget Password",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16)),
+        ),
+      )
     );
   }
 }

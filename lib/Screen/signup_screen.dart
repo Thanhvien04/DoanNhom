@@ -1,16 +1,17 @@
+import 'package:doan/Screen/Otp_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class Signup_interface extends StatefulWidget {
-  const Signup_interface({super.key});
+class Signup_screen extends StatefulWidget {
+  const Signup_screen({super.key});
 
   @override
-  State<Signup_interface> createState() => _Signup_interfaceState();
+  State<Signup_screen> createState() => _Signup_screenState();
 }
 
-class _Signup_interfaceState extends State<Signup_interface> {
+class _Signup_screenState extends State<Signup_screen> {
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
@@ -99,6 +100,7 @@ class _Signup_interfaceState extends State<Signup_interface> {
                   height: 20,
                 ),
                 TextFormField(
+                  obscureText: true,
                   controller: _passwordcontroller,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
@@ -131,10 +133,10 @@ class _Signup_interfaceState extends State<Signup_interface> {
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
-                      FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: _emailcontroller.text,
-                        password: _passwordcontroller.text,
-                      );
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OtpScreen()));
                     },
                     child: const Text(
                       "Sign Up",
@@ -161,7 +163,7 @@ class _Signup_interfaceState extends State<Signup_interface> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Login_interface()));
+                                  builder: (context) => const Login_screen()));
                         },
                         child: RichText(
                           text: const TextSpan(
