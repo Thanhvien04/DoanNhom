@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "377422373515",
+    "project_id": "chatsimple-7442d",
+    "storage_bucket": "chatsimple-7442d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377422373515:android:c1ea6d5e07efdb1e4a6a8e",
+        "android_client_info": {
+          "package_name": "com.example.chatsimple"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4VlI0BocvkkqDuN1pEheQ3gcF_dKno2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377422373515:android:df5a7386828092ff4a6a8e",
+        "android_client_info": {
+          "package_name": "com.example.doan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4VlI0BocvkkqDuN1pEheQ3gcF_dKno2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

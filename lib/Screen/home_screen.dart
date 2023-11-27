@@ -1,4 +1,7 @@
+import 'package:doan/servers/controler.dart';
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
+import 'package:doan/servers/session.dart';
 
 class Home_Screen extends StatefulWidget {
   const Home_Screen({super.key});
@@ -13,12 +16,7 @@ class _Home_ScreenState extends State<Home_Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const Drawer(
-          child: ListTile(
-            leading: Icon(Icons.home),
-            title: Text("Home"),
-          ),
-        ),
+        appBar: AppBar(title: Text(Sesion().userId.toString())),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "94262903566",
+    "project_id": "nguyencongthanh-48b36",
+    "storage_bucket": "nguyencongthanh-48b36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94262903566:android:b006ee83e3a10f26190d5f",
+        "android_client_info": {
+          "package_name": "com.framgia.lupx.firebasestorage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjhdqHNdxqVzi8jAL2c7hEfwotp6--O-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

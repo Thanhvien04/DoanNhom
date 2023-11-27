@@ -1,7 +1,12 @@
-import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'package:doan/Screen/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:doan/login/login.dart';
+import 'package:provider/provider.dart';
+import 'home_screen.dart';
 import 'signup_screen.dart';
+import 'setting.dart';
+import 'package:doan/login/login.dart';
 
 class Login_interface extends StatefulWidget {
   const Login_interface({super.key});
@@ -29,9 +34,13 @@ class _Login_interfaceState extends State<Login_interface> {
     return user;
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  //final _formkey = GlobalKey<FormState>();
   String value = '';
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final emailPocus = FocusNode();
+  final PasswordPocus = FocusNode();
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
@@ -40,8 +49,19 @@ class _Login_interfaceState extends State<Login_interface> {
     return Color(int.parse(hexColor, radix: 16));
   }
 
+  // @override
+  // void dispose() {
+  //   // _email.dispose();
+  //   // _password.dispose();
+  //   emailPocus.dispose();
+  //   PasswordPocus.dispose();
+  // }
+
+  var provider;
   @override
   Widget build(BuildContext context) {
+    // Key:
+    // _formkey;
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -58,13 +78,14 @@ class _Login_interfaceState extends State<Login_interface> {
             child: Column(
               children: [
                 Image.asset(
-                  "asset/nha.png",
+                  "asset/h1.jpg",
                   fit: BoxFit.fitWidth,
                   height: 350,
                   width: 500,
                 ),
                 TextFormField(
                   controller: _email,
+                  // focusNode: emailPocus,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       filled: true,
@@ -89,6 +110,7 @@ class _Login_interfaceState extends State<Login_interface> {
                 ),
                 TextFormField(
                   controller: _password,
+                  // focusNode: PasswordPocus,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       filled: true,
@@ -116,26 +138,73 @@ class _Login_interfaceState extends State<Login_interface> {
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold),
                 ),
+                // ChangeNotifierProvider(
+                //   create: (_) => logincontroler(),
+                //   child: Consumer<logincontroler>(
+                //       builder: (context, provider, child) {
+                //     return ElevatedButton(
+                //         onPressed: () {
+                //           Navigator.of(context).pushReplacement(
+                //               MaterialPageRoute(
+                //                   builder: (contnnext) => Profile()));
+
+                //           if (_formkey.currentState!.validate()) {
+                //             provider.login(
+                //                 context, _email.text, _password.text);
+                //           }
+                //         },
+                //         child: const Text(
+                //           "Login",
+                //           style: TextStyle(
+                //               fontSize: 20,
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.red),
+                //         ));
+                //   }),
+                // ),
+                // ElevatedButton(
+                //     style: const ButtonStyle(
+                //         backgroundColor:
+                //             MaterialStatePropertyAll(Colors.white70)),
+                //     onPressed: () async {
+                //       User? user = await loginUsingEmailPassword(
+                //           email: _email.text,
+                //           password: _password.text,
+                //           context: context);
+                //       print(user);
+                //       if (user != null) {
+                //         Navigator.pushNamed(context, '/profile');
+                //       } else {
+                //         setState(() {
+                //           value = "Username or Password not Invalible !!";
+                //         });
+                //         print("Username or Password not Invalible !!");
+                //       }
+                //       ;
+                //     },
                 ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () async {
-                      User? user = await loginUsingEmailPassword(
+                      try {
+                        final user = await _auth.signInWithEmailAndPassword(
                           email: _email.text,
                           password: _password.text,
-                          context: context);
-                      print(user);
-                      if (user != null) {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const Home_Screen()));
-                      } else {
-                        setState(() {
-                          value = "Username or Password not Invalible !!";
-                        });
-                        print("Username or Password not Invalible !!");
-                      }
-                      ;
+                        );
+                        //print(user);
+                        if (user != null) {
+                          _email.clear();
+                          _password.clear();
+                          Navigator.pushNamed(context, '/profile');
+                        } else {
+                          setState(() {
+                            value = "Username or Password not Invalible !!";
+                          });
+                          print("Username or Password not Invalible !!");
+                        }
+                        ;
+                      } catch (e) {}
                     },
                     child: const Text(
                       "Login",
