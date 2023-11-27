@@ -1,13 +1,6 @@
-import 'package:doan/Screen/Otp_Screen.dart';
-import 'package:doan/Screen/home_screen.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'package:doan/Screen/forget_screen.dart';
-import 'package:doan/Screen/home_screen.dart';
-import 'package:doan/Screen/signup_screen.dart';
-import 'package:doan/Screen/test.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
