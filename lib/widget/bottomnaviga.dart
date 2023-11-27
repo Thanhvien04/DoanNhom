@@ -1,3 +1,4 @@
+import 'package:doan/Screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -49,8 +50,8 @@ class _BottomNavState extends State<BottomNav> {
         }
         if (indexOfItem == 1) {
           if (widget.idx != 1) {
-            Navigator.popUntil(context, (route) => route.isFirst);
-            Navigator.pushNamed(context, '/profile');
+             Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const Profile_screen()));
           }
         }
       },

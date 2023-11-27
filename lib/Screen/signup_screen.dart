@@ -136,7 +136,7 @@ class _Signup_screenState extends State<Signup_screen> {
                       Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OtpScreen()));
+                                  builder: (context) => const OtpScreen()));
                     },
                     child: const Text(
                       "Sign Up",

@@ -37,7 +37,7 @@ class OtpScreen extends StatelessWidget {
             children: [
               Text(
                 "Enter the OTP send to your phone number",
-                style: TextStyle(fontSize: 15, color: Colors.grey.shade500),
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
               )
             ],
           ),
@@ -63,7 +63,7 @@ class OtpScreen extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Container(
+          SizedBox(
               width: 400,
               height: 50,
               child: ElevatedButton(
@@ -79,7 +79,7 @@ class OtpScreen extends StatelessWidget {
                             size: 50,
                           ),
                           actions: [
-                            Container(
+                            SizedBox(
                               width: 300,
                               height: 50,
                               child: FloatingActionButton(
@@ -102,11 +102,11 @@ class OtpScreen extends StatelessWidget {
                         );
                       });
                 },
-                child: Text(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+                child: const Text(
                   "Verify",
                   style: TextStyle(color: Colors.white),
                 ),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
               )),
           const SizedBox(
             height: 20,

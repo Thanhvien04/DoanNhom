@@ -202,6 +202,7 @@ class _Home_ScreenState extends State<Home_Screen> {
         appBar: AppBar(
           title: const Text('Trang chủ'),
           backgroundColor: Colors.blue,
+          automaticallyImplyLeading: false
         ),
         bottomNavigationBar: const BottomNav(
           idx: 0,
