@@ -1,11 +1,17 @@
-<<<<<<< HEAD
-=======
 import 'package:doan/Screen/Otp_Screen.dart';
 import 'package:doan/Screen/home_screen.dart';
->>>>>>> c56247823e975928df0bdd62a155922a8f5afebb
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Screen/profile.dart';
+
+import 'package:doan/Screen/forget_screen.dart';
+import 'package:doan/Screen/home_screen.dart';
+import 'package:doan/Screen/signup_screen.dart';
+import 'package:doan/Screen/test.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 import 'Screen/login_screen.dart';
 
 ////vien
@@ -31,12 +37,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const Profile());
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: '/login',
+      routes: {
+        '/': (context) => const Home_Screen(),
+        '/forget': (context) => const ForgetPassword_Screen(),
+        '/login': (context) => const Login_screen(),
+        '/signup': (context) => const Signup_screen(),
+      },
+    );
   }
 }

@@ -1,15 +1,16 @@
 import 'dart:ui';
+import '../widget/bottomnaviga.dart';
 import 'login_screen.dart';
 import 'package:flutter/material.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class Profile_screen extends StatefulWidget {
+  const Profile_screen({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<Profile_screen> createState() => _Profile_screenState();
 }
 
-class _ProfileState extends State<Profile> {
+class _Profile_screenState extends State<Profile_screen> {
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
@@ -21,6 +22,10 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: const BottomNav(
+        idx: 1,
+      ),
+
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -42,7 +47,7 @@ class _ProfileState extends State<Profile> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Login_interface()));
+                          builder: (context) => const Login_screen()));
                 },
                 child: const CircleAvatar(
                   radius: 150,
@@ -72,7 +77,7 @@ class _ProfileState extends State<Profile> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: hexStringToColor("BB3B93"),
-                    fixedSize: Size(double.maxFinite, 50),
+                    fixedSize: const Size(double.maxFinite, 50),
                   ),
                   child: const Text(
                     "Phone",
@@ -88,7 +93,7 @@ class _ProfileState extends State<Profile> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: hexStringToColor("BB3B93"),
-                    fixedSize: Size(double.maxFinite, 50),
+                    fixedSize: const Size(double.maxFinite, 50),
                   ),
                   child: const Text(
                     "Password",

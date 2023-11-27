@@ -37,11 +37,16 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.13.0
   firebase_core: ^2.22.0
+<<<<<<< HEAD
   pinput: ^3.0.1
 <<<<<<< HEAD
 =======
 
 >>>>>>> c56247823e975928df0bdd62a155922a8f5afebb
+=======
+  firebase_database: 10.3.4
+  pinput: ^3.0.1
+>>>>>>> master
 dev_dependencies:
   flutter_test:
     sdk: flutter

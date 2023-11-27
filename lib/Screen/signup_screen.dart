@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class Signup_interface extends StatefulWidget {
-  const Signup_interface({super.key});
+class Signup_screen extends StatefulWidget {
+  const Signup_screen({super.key});
 
   @override
-  State<Signup_interface> createState() => _Signup_interfaceState();
+  State<Signup_screen> createState() => _Signup_screenState();
 }
 
-class _Signup_interfaceState extends State<Signup_interface> {
+class _Signup_screenState extends State<Signup_screen> {
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
@@ -134,9 +134,9 @@ class _Signup_interfaceState extends State<Signup_interface> {
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
                       Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OtpScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OtpScreen()));
                     },
                     child: const Text(
                       "Sign Up",
@@ -163,7 +163,7 @@ class _Signup_interfaceState extends State<Signup_interface> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Login_interface()));
+                                  builder: (context) => const Login_screen()));
                         },
                         child: RichText(
                           text: const TextSpan(
