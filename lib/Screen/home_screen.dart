@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:doan/widget/DefaultTabController.dart';
 import 'package:doan/widget/bottomnaviga.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../models/device.dart';
@@ -105,8 +101,10 @@ class _Home_ScreenState extends State<Home_Screen> {
       for (i = 0; i < room.child("lstDevice").children.length; i++) {
         if (room
                 .child("lstDevice")
-                .child("$i").child("delete")
-                .value.toString() ==
+                .child("$i")
+                .child("delete")
+                .value
+                .toString() ==
             false.toString()) {
           Device dv = Device(
               id: int.parse(room
@@ -200,10 +198,9 @@ class _Home_ScreenState extends State<Home_Screen> {
     loadRoom();
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Trang chủ'),
-          backgroundColor: Colors.blue,
-          automaticallyImplyLeading: false
-        ),
+            title: const Text('Trang chủ'),
+            backgroundColor: Colors.blue,
+            automaticallyImplyLeading: false),
         bottomNavigationBar: const BottomNav(
           idx: 0,
         ),
@@ -263,8 +260,8 @@ class _Home_ScreenState extends State<Home_Screen> {
                                     if (txt_RoomName.text.isNotEmpty) {
                                       addRoom(Room(
                                           id: lstRoom.length,
-                                          lstDevice: addListDevice(
-                                              lstRoom.length),
+                                          lstDevice:
+                                              addListDevice(lstRoom.length),
                                           name: txt_RoomName.text));
                                       roomIsEmpty = false;
                                     }
