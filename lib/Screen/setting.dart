@@ -1,21 +1,21 @@
 import 'dart:io';
-import 'package:doan/Screen/profile.dart';
+import 'package:doan/Screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class setting extends StatefulWidget {
-  setting({super.key});
+class Setting_screen extends StatefulWidget {
+  Setting_screen({super.key});
 
   @override
-  State<setting> createState() => _settingState();
+  State<Setting_screen> createState() => _Setting_screenState();
 }
 
-class _settingState extends State<setting> {
-  TextEditingController contactEmail = new TextEditingController();
-  TextEditingController _password = new TextEditingController();
-  TextEditingController _phone = new TextEditingController();
+class _Setting_screenState extends State<Setting_screen> {
+  TextEditingController contactEmail = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
   File? _imagefile;
   var url;
   var url1;
@@ -26,17 +26,6 @@ class _settingState extends State<setting> {
     super.initState();
     db_ref = FirebaseDatabase.instance.ref().child('users');
   }
-
-  // void _Contact_data() async {
-  // //   //DataSnapshot snapshot = await db_ref!.child(widget.useer).get();
-  // //  // Map contact = snapshot.value as Map;
-  // //   setState(() {
-  // //     contactEmail.text = contact['Email'];
-  // //     contactEmail.text = contact['phone'];
-  // //     contactEmail.text = contact['Password'];
-  // //     //url = contact['image'];
-  //   });
-  // }
 
   late User? user = FirebaseAuth.instance.currentUser;
   Future<void> _pickImage(ImageSource gallery) async {
@@ -71,6 +60,7 @@ class _settingState extends State<setting> {
     return Color(int.parse(hexColor, radix: 16));
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
@@ -86,10 +76,10 @@ class _settingState extends State<setting> {
       ),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
               if (_imagefile != null)
@@ -98,12 +88,12 @@ class _settingState extends State<setting> {
                   backgroundImage: FileImage((_imagefile!)),
                 )
               else
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 120,
                   backgroundImage: AssetImage('asset/h2.jpg'),
                 ),
               ElevatedButton(
-                  child: Text(
+                  child: const Text(
                     "Change",
                     style: TextStyle(color: Colors.black, fontSize: 15),
                   ),
@@ -112,12 +102,12 @@ class _settingState extends State<setting> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Row(children: []),
+                            title: const Row(children: []),
                             content: Row(children: [
                               ElevatedButton(
                                   onPressed: () =>
                                       _pickImage(ImageSource.gallery),
-                                  child: Row(children: [
+                                  child: const Row(children: [
                                     Icon(
                                       Icons.library_add,
                                       color: Colors.black,
@@ -127,12 +117,12 @@ class _settingState extends State<setting> {
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ])),
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                               ),
                               ElevatedButton(
                                   onPressed: () => _pickImageFromCamera(),
-                                  child: Row(children: [
+                                  child: const Row(children: [
                                     Icon(
                                       Icons.camera_alt,
                                       color: Colors.black,
@@ -144,7 +134,7 @@ class _settingState extends State<setting> {
                                   ])),
                             ]),
                             actions: <Widget>[
-                              Padding(padding: EdgeInsets.all(25)),
+                              const Padding(padding: EdgeInsets.all(25)),
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
@@ -177,7 +167,7 @@ class _settingState extends State<setting> {
                         Icons.phone_android,
                         color: Colors.black,
                       ))),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -236,7 +226,7 @@ class _settingState extends State<setting> {
               ),
               Center(
                   child: Row(children: [
-                Padding(padding: EdgeInsets.all(30)),
+                const Padding(padding: EdgeInsets.all(30)),
                 ElevatedButton(
                     onPressed: () {
                       showDialog(
@@ -263,20 +253,20 @@ class _settingState extends State<setting> {
                               ),
                               actions: <Widget>[
                                 Row(children: [
-                                  Padding(padding: EdgeInsets.all(10)),
+                                  const Padding(padding: EdgeInsets.all(10)),
                                   TextButton(
                                       onPressed: () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Profile()));
+                                                    const Profile_screen()));
                                       },
                                       child: const Text(
                                         "Ok",
                                         style: TextStyle(color: Colors.black),
                                       )),
-                                  Padding(padding: EdgeInsets.all(25)),
+                                  const Padding(padding: EdgeInsets.all(25)),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -291,35 +281,35 @@ class _settingState extends State<setting> {
                             );
                           });
                     },
-                    child: Text(
+                    style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.white70),
+                    ),
+                    child: const Text(
                       "Update",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           fontSize: 17),
-                    ),
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.white70),
                     )),
-                Padding(padding: EdgeInsets.all(20)),
+                const Padding(padding: EdgeInsets.all(20)),
                 ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Profile(),
+                          builder: (context) => const Profile_screen(),
                         ),
                       );
                     },
-                    child: Text(
+                    style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.white70),
+                    ),
+                    child: const Text(
                       "Cancel",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           fontSize: 17),
-                    ),
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.white70),
                     ))
               ])),
             ],

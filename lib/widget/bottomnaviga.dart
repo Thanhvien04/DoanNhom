@@ -1,7 +1,5 @@
 import 'package:doan/Screen/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key, required this.idx});

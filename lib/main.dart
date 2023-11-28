@@ -1,10 +1,8 @@
 import 'package:doan/Screen/forget_screen.dart';
 import 'package:doan/Screen/home_screen.dart';
 import 'package:doan/Screen/signup_screen.dart';
-import 'package:doan/Screen/test.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'Screen/login_screen.dart';
 
 void main() async {
@@ -41,7 +39,6 @@ class MyApp extends StatelessWidget {
         '/forget': (context) => const ForgetPassword_Screen(),
         '/login': (context) => const Login_screen(),
         '/signup': (context) => const Signup_screen(),
-        
       },
     );
   }

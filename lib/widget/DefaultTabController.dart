@@ -1,6 +1,3 @@
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:doan/Screen/home_screen.dart';
 import 'package:doan/models/device.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -135,9 +132,6 @@ class _defaultTabControllerState extends State<defaultTabController> {
             lst_device.add(dv);
           });
         }
-        // var item=lst_device[0];
-        // lst_device[0]= lst_device[lst_device.length-1];
-        // lst_device[lst_device.length-1]=item;
         var ref =
             await FirebaseDatabase.instance.ref().child("room/${id_room}");
         ref.child("lstDevice").set(lst_device).then((lstdevice) {
@@ -149,20 +143,6 @@ class _defaultTabControllerState extends State<defaultTabController> {
         });
       }
     }
-    // setState(() {
-    //   for (var item in widget.lst_room) {
-    //     if (item.id == id_room) {
-    //       Device dv = Device(
-    //         id: item.lstDevice.length,
-    //         stt: false,
-    //         name: val,
-    //         img: val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
-    //         id_room: item.id,
-    //       );
-    //       item.lstDevice.add(dv);
-    //     }
-    //   }
-    // });
   }
 
   void loadRoom() {

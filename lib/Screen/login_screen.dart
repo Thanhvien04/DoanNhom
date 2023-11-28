@@ -12,7 +12,7 @@ class Login_screen extends StatefulWidget {
 }
 
 class _Login_screenState extends State<Login_screen> {
-static Future<User?> loginUsingEmailPassword(
+  static Future<User?> loginUsingEmailPassword(
       {required String email,
       required String password,
       required BuildContext context}) async {
@@ -120,7 +120,6 @@ static Future<User?> loginUsingEmailPassword(
                 const SizedBox(
                   height: 8,
                 ),
-                
                 ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
@@ -142,7 +141,6 @@ static Future<User?> loginUsingEmailPassword(
                       }
                       ;
                     },
-                    
                     child: const Text(
                       "Login",
                       style: TextStyle(
@@ -150,7 +148,9 @@ static Future<User?> loginUsingEmailPassword(
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     )),
-                const SizedBox(height: 8,),
+                const SizedBox(
+                  height: 8,
+                ),
                 forgetPassword(context),
                 Padding(
                   padding: const EdgeInsets.only(right: 30, top: 10),
@@ -192,27 +192,26 @@ static Future<User?> loginUsingEmailPassword(
     );
   }
 
-  Widget forgetPassword(BuildContext context){
+  Widget forgetPassword(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 20,
-      alignment: Alignment.bottomRight,
-      child:  InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ForgetPassword_Screen()));
-        },
-        child: RichText(
-          text: const TextSpan(
-              text: "Forget Password",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16)),
-        ),
-      )
-    );
+        width: MediaQuery.of(context).size.width,
+        height: 20,
+        alignment: Alignment.bottomRight,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ForgetPassword_Screen()));
+          },
+          child: RichText(
+            text: const TextSpan(
+                text: "Forget Password",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16)),
+          ),
+        ));
   }
 }
