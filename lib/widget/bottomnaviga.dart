@@ -32,7 +32,6 @@ class _BottomNavState extends State<BottomNav> {
           ),
           label: "Trang chủ",
         ),
-
         BottomNavigationBarItem(
             icon: Icon(
               Icons.account_circle,
@@ -45,13 +44,12 @@ class _BottomNavState extends State<BottomNav> {
         if (indexOfItem == 0) {
           if (widget.idx != 0) {
             Navigator.popUntil(context, (route) => route.isFirst);
-            //Navigator.pushNamed(context, '/');
           }
         }
         if (indexOfItem == 1) {
           if (widget.idx != 1) {
-             Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const Profile_screen()));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const Profile_screen()));
           }
         }
       },
