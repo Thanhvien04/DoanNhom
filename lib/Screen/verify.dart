@@ -1,4 +1,3 @@
-import 'package:doan/Screen/login_screen.dart';
 import 'package:doan/Screen/phone.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,24 +17,24 @@ class _MyVerifyState extends State<MyVerify> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
           fontSize: 20,
           color: Color.fromRGBO(30, 60, 87, 1),
           fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
-        border: Border.all(color: Color.fromRGBO(234, 239, 243, 1)),
+        border: Border.all(color: const Color.fromRGBO(234, 239, 243, 1)),
         borderRadius: BorderRadius.circular(20),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
+      border: Border.all(color: const Color.fromRGBO(114, 178, 238, 1)),
       borderRadius: BorderRadius.circular(8),
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: Color.fromRGBO(234, 239, 243, 1),
+        color: const Color.fromRGBO(234, 239, 243, 1),
       ),
     );
     var code = "";
@@ -47,7 +46,7 @@ class _MyVerifyState extends State<MyVerify> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.black,
           ),
@@ -55,7 +54,7 @@ class _MyVerifyState extends State<MyVerify> {
         elevation: 0,
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
+        margin: const EdgeInsets.only(left: 25, right: 25),
         alignment: Alignment.center,
         child: SingleChildScrollView(
           child: Column(
@@ -114,15 +113,12 @@ class _MyVerifyState extends State<MyVerify> {
                             PhoneAuthProvider.credential(
                                 verificationId: MyPhone.verify, smsCode: code);
                         await auth.signInWithCredential(credential);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Login_screen()));
+                        Navigator.pushNamed(context, "/login");
                       } catch (e) {
                         print("Wrong Otp");
                       }
                     },
-                    child: Text("Verify Phone Number")),
+                    child: const Text("Verify Phone Number")),
               ),
               Row(
                 children: [

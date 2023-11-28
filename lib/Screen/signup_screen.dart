@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:doan/Screen/phone.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'login_screen.dart';
@@ -23,7 +26,7 @@ class _Signup_screenState extends State<Signup_screen> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _phonecontroller = TextEditingController();
-
+  final File _image = File('asset/h2.jpg');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,6 +135,10 @@ class _Signup_screenState extends State<Signup_screen> {
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
+                      FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: _emailcontroller.text,
+                        password: _passwordcontroller.text,
+                      );
                       Navigator.push(
                           context,
                           MaterialPageRoute(

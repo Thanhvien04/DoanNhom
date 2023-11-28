@@ -7,7 +7,6 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var otpcode;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -56,9 +55,7 @@ class OtpScreen extends StatelessWidget {
               textStyle:
                   const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            onSubmitted: (value) {
-              otpcode = value;
-            },
+            onSubmitted: (value) {},
           ),
           const SizedBox(
             height: 20,
