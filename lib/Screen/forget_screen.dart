@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class ForgetPassword_Screen extends StatefulWidget {
   const ForgetPassword_Screen({super.key});
@@ -78,8 +76,8 @@ class _ForgetPassword_ScreenState extends State<ForgetPassword_Screen> {
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
                       FirebaseAuth.instance
-                      .sendPasswordResetEmail(email: _emailcontroller.text)
-                      .then((value) => Navigator.of(context).pop());
+                          .sendPasswordResetEmail(email: _emailcontroller.text)
+                          .then((value) => Navigator.of(context).pop());
                     },
                     child: const Text(
                       "Forget Password",

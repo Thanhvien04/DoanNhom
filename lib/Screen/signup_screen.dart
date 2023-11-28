@@ -1,8 +1,7 @@
-import 'package:doan/Screen/Otp_Screen.dart';
+import 'package:doan/Screen/phone.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'login_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class Signup_screen extends StatefulWidget {
   const Signup_screen({super.key});
@@ -134,9 +133,9 @@ class _Signup_screenState extends State<Signup_screen> {
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
                       Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const OtpScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyPhone()));
                     },
                     child: const Text(
                       "Sign Up",
