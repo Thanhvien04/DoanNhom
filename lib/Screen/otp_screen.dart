@@ -85,7 +85,7 @@ class OtpScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const Login_screen()));
+                                              Login_screen()));
                                 },
                                 backgroundColor: Colors.purple,
                                 child: const Text(
