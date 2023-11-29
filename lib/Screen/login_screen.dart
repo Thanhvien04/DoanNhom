@@ -11,8 +11,6 @@ class Login_screen extends StatefulWidget {
   State<Login_screen> createState() => _Login_screenState();
 }
 
-bool _obscureText = true;
-
 class _Login_screenState extends State<Login_screen> {
   static Future<User?> loginUsingEmailPassword(
       {required String email,
@@ -91,22 +89,11 @@ class _Login_screenState extends State<Login_screen> {
                   height: 20,
                 ),
                 TextFormField(
-                  obscureText: true,
                   controller: _password,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       filled: true,
                       labelText: "Enter Password",
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                        child: Icon(_obscureText
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                      ),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelStyle:
                           TextStyle(color: Colors.white.withOpacity(0.9)),

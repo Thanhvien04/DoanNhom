@@ -1,4 +1,4 @@
-import 'package:doan/login_interface.dart';
+import 'package:doan/Screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
@@ -7,7 +7,6 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var otpcode;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -37,7 +36,7 @@ class OtpScreen extends StatelessWidget {
             children: [
               Text(
                 "Enter the OTP send to your phone number",
-                style: TextStyle(fontSize: 15, color: Colors.grey.shade500),
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
               )
             ],
           ),
@@ -56,14 +55,12 @@ class OtpScreen extends StatelessWidget {
               textStyle:
                   const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            onSubmitted: (value) {
-              otpcode = value;
-            },
+            onSubmitted: (value) {},
           ),
           const SizedBox(
             height: 20,
           ),
-          Container(
+          SizedBox(
               width: 400,
               height: 50,
               child: ElevatedButton(
@@ -79,7 +76,7 @@ class OtpScreen extends StatelessWidget {
                             size: 50,
                           ),
                           actions: [
-                            Container(
+                            SizedBox(
                               width: 300,
                               height: 50,
                               child: FloatingActionButton(
@@ -88,7 +85,7 @@ class OtpScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const Login_interface()));
+                                              const Login_screen()));
                                 },
                                 backgroundColor: Colors.purple,
                                 child: const Text(
@@ -102,11 +99,11 @@ class OtpScreen extends StatelessWidget {
                         );
                       });
                 },
-                child: Text(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+                child: const Text(
                   "Verify",
                   style: TextStyle(color: Colors.white),
                 ),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
               )),
           const SizedBox(
             height: 20,

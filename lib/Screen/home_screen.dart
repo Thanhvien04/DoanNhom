@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'dart:ffi';
+
 import 'package:doan/widget/DefaultTabController.dart';
 import 'package:doan/widget/bottomnaviga.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../models/device.dart';
@@ -101,258 +100,302 @@ class _Home_ScreenState extends State<Home_Screen> {
     final response = await FirebaseDatabase.instance.ref().child("room").get();
     for (DataSnapshot room in response.children) {
       List<Device> lst_device = [];
-      for (i = 0; i < room.child("lstDevice").children.length; i++) {
-        if (room
-                .child("lstDevice")
-                .child("$i")
-                .child("delete")
-                .value
-                .toString() ==
-            false.toString()) {
-          Device dv = Device(
-              id: int.parse(room
-                  .child("lstDevice")
-                  .child("$i")
-                  .child("id")
-                  .value
-                  .toString()),
-              stt: bool.parse(room
-                  .child("lstDevice")
-                  .child("$i")
-                  .child("stt")
-                  .value
-                  .toString()),
-              name: room
-                  .child("lstDevice")
-                  .child("$i")
-                  .child("name")
-                  .value
-                  .toString(),
-              img: room
-                  .child("lstDevice")
-                  .child("$i")
-                  .child("img")
-                  .value
-                  .toString(),
-              id_room: int.parse(room
-                  .child("lstDevice")
-                  .child("$i")
-                  .child("id_room")
-                  .value
-                  .toString()),
-              delete: bool.parse(room
+      if (room.child("delete").value.toString() == false.toString()) {
+        for (i = 0; i < room.child("lstDevice").children.length; i++) {
+          if (room
                   .child("lstDevice")
                   .child("$i")
                   .child("delete")
                   .value
-                  .toString()));
+                  .toString() ==
+              false.toString()) {
+            Device dv = Device(
+                id: int.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("id")
+                    .value
+                    .toString()),
+                stt: bool.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("stt")
+                    .value
+                    .toString()),
+                name: room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("name")
+                    .value
+                    .toString(),
+                img: room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("img")
+                    .value
+                    .toString(),
+                id_room: int.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("id_room")
+                    .value
+                    .toString()),
+                delete: bool.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("delete")
+                    .value
+                    .toString()));
 
-          lst_device.add(dv);
+            lst_device.add(dv);
+          }
+        }
+        Room roomnew = Room(
+            id: int.parse(room.child('id').value.toString()),
+            lstDevice: lst_device,
+            delete: false,
+            name: room.child('name').value.toString());
+        lst_room.add(roomnew);
+        setState(() {
+          lstRoom = lst_room;
+        });
+
+        if (lstRoom_sort.isNotEmpty) {
+          roomIsEmpty = false;
+        } else {
+          roomIsEmpty = true;
         }
       }
-      Room roomnew = Room(
-          id: int.parse(room.child('id').value.toString()),
-          lstDevice: lst_device,
-          name: room.child('name').value.toString());
-      lst_room.add(roomnew);
-    }
-    setState(() {
-      lstRoom = lst_room;
-    });
-
-    if (lstRoom_sort.isNotEmpty) {
-      roomIsEmpty = false;
-    } else {
-      roomIsEmpty = true;
     }
   }
 
-  void addRoom(Room room) {
-    setState(() {
-      var list_device = [];
-      room.lstDevice.forEach((device) {
-        var _device = {
-          "id": device.id.toString(),
-          "stt": device.stt.toString(),
-          "name": device.name,
-          "img": device.img,
-          "id_room": device.id_room.toString(),
-          "delete": false.toString()
-        };
-        list_device.add(_device);
-      });
-      var _room = {
-        "name": room.name,
-        "lstDevice": list_device,
-        "id": room.id,
+  Future<void> addRoom(Room room) async {
+    var list_device = [];
+    room.lstDevice.forEach((device) {
+      var _device = {
+        "id": device.id.toString(),
+        "stt": device.stt.toString(),
+        "name": device.name,
+        "img": device.img,
+        "id_room": device.id_room.toString(),
+        "delete": false.toString()
       };
-
-      var ref = FirebaseDatabase.instance.ref().child("room");
-      ref.child(room.id.toString()).set(_room).then((room) {
-        print('Thêm thành công');
-      }).catchError((onError) {
-        print('Thêm không thành công');
-      });
+      list_device.add(_device);
     });
+    var _room = {
+      "name": room.name,
+      "lstDevice": list_device,
+      "id": room.id,
+      "delete": room.delete
+    };
+    bool flag=false;
+    final response = await FirebaseDatabase.instance.ref().child("room").get();
+    for (DataSnapshot _room in response.children) {
+      if (_room.child("delete").value.toString() == true.toString()) {
+        if (_room.child("name").value.toString().toLowerCase() ==
+            room.name.toLowerCase()) {
+          final ref1 = FirebaseDatabase.instance.ref().child("room");
+          ref1
+              .child(_room.child("id").value.toString())
+              .update({"delete": false}).then((value) {
+            print("Thêm phòng thành công");
+            flag=true;
+          }).catchError((onError) {
+            print('Thêm phòng không thành công');
+          });
+        }
+      }
+    }
+    if(flag==false){
+    var ref = FirebaseDatabase.instance.ref().child("room");
+    ref.child(room.id.toString()).set(_room).then((room) {
+      print('Thêm thành công');
+    }).catchError((onError) {
+      print('Thêm không thành công');
+    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     loadRoom();
     return Scaffold(
-      appBar: AppBar(
-          title: const Text('Trang chủ'),
-          backgroundColor: Colors.blue,
-          automaticallyImplyLeading: false),
-      bottomNavigationBar: const BottomNav(
-        idx: 0,
-      ),
-      body: SingleChildScrollView(
-          child: Column(
-        children: [
-          defaultTabController(
-            lst_room: lstRoom,
-            roomIsEmpty: roomIsEmpty,
-            callback: () {},
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 10),
-                width: MediaQuery.of(context).size.width / 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.7,
-                      child: MaterialButton(
-                        height: 40,
-                        onPressed: () {},
-                        color: Colors.red,
-                        child: const Text('Báo cháy'),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.7,
-                      child: MaterialButton(
-                        height: 40,
-                        onPressed: () {
-                          turnOffAllLights();
-                        },
-                        color: Colors.blue,
-                        child: const Text('Tắt hết đèn'),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.7,
-                      child: MaterialButton(
-                        height: 40,
-                        onPressed: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Thêm phòng'),
-                            content: TextField(
-                              controller: txt_RoomName,
-                              decoration: const InputDecoration(
-                                labelText: "Nhập tên phòng",
-                              ),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  if (txt_RoomName.text.isNotEmpty) {
-                                    addRoom(Room(
-                                        id: lstRoom.length,
-                                        lstDevice:
-                                            addListDevice(lstRoom.length),
-                                        name: txt_RoomName.text));
-                                    roomIsEmpty = false;
-                                  }
-                                },
-                                child: const Text('Thêm'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        color: Colors.blue,
-                        child: const Text('Thêm phòng'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 25),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0),
-            child: Divider(
-              thickness: 1,
-              color: Color.fromARGB(255, 204, 204, 204),
+        appBar: AppBar(
+            title: const Text('Trang chủ'),
+            backgroundColor: Colors.blue,
+            automaticallyImplyLeading: false),
+        bottomNavigationBar: const BottomNav(
+          idx: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Column(children: [
+            defaultTabController(
+              lst_room: lstRoom,
+              roomIsEmpty: roomIsEmpty,
+              callback: () {},
             ),
-          ),
-
-          const SizedBox(height: 25),
-
-          // smart devices grid
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0),
-            child: Text(
-              "Smart Devices",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Colors.grey.shade800,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // grid
-
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 2.2,
-            child: Column(children: [
-              const Text('Tốc độ quạt'),
-              Slider(
-                value: _currentSliderValue,
-                max: 100,
-                divisions: 100,
-                label: _currentSliderValue.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _currentSliderValue = value;
-                  });
-                },
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 2.2,
-                height: 100,
-                color: Colors.black12,
-                child: const SingleChildScrollView(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  width: MediaQuery.of(context).size.width / 2,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
-                      Text('Thông báo'),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.7,
+                        child: MaterialButton(
+                          height: 40,
+                          onPressed: () {},
+                          color: Colors.red,
+                          child: const Text('Báo cháy'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.7,
+                        child: MaterialButton(
+                          height: 40,
+                          onPressed: () {
+                            turnOffAllLights();
+                          },
+                          color: Colors.blue,
+                          child: const Text('Tắt hết đèn'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.7,
+                        child: MaterialButton(
+                          height: 40,
+                          onPressed: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Thêm phòng'),
+                              content: TextField(
+                                controller: txt_RoomName,
+                                decoration: const InputDecoration(
+                                  labelText: "Nhập tên phòng",
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    if (txt_RoomName.text.isNotEmpty) {
+                                      addRoom(Room(
+                                          delete: false,
+                                          id: lstRoom.length,
+                                          lstDevice:
+                                              addListDevice(lstRoom.length),
+                                          name: txt_RoomName.text));
+                                      roomIsEmpty = false;
+                                    }
+                                  },
+                                  child: const Text('Thêm'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          color: Colors.blue,
+                          child: const Text('Thêm phòng'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.7,
+                        child: MaterialButton(
+                          height: 40,
+                          onPressed: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Xóa phòng'),
+                              content: SizedBox(
+                                height: 100,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: lstRoom
+                                        .map((room) => lstRoomDel(room))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          color: Colors.blue,
+                          child: const Text('Xóa phòng'),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              )
-            ]),
-          ),
-        ],
-      )),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2.2,
+                  child: Column(children: [
+                    const Text('Tốc độ quạt'),
+                    Slider(
+                      value: _currentSliderValue,
+                      max: 100,
+                      divisions: 100,
+                      label: _currentSliderValue.round().toString(),
+                      onChanged: (double value) {
+                        setState(() {
+                          _currentSliderValue = value;
+                        });
+                      },
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      height: 100,
+                      color: Colors.black12,
+                      child: const SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                            Text('Thông báo'),
+                          ],
+                        ),
+                      ),
+                    )
+                  ]),
+                ),
+              ],
+            )
+          ]),
+        ));
+  }
+
+  Row lstRoomDel(Room room) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(room.name),
+        IconButton(
+            onPressed: () {
+              var delete = FirebaseDatabase.instance
+                  .ref()
+                  .child('room/${room.id}')
+                  .update({"delete": true}).then((value) {
+                print("Xóa phòng thành công");
+              }).catchError((onError) {
+                print('Xóa phòng không thành công');
+              });
+            },
+            icon: const Icon(Icons.close)),
+      ],
     );
   }
 }

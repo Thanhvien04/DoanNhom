@@ -1,11 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-
+import 'Screen/forget_screen.dart';
+import 'Screen/home_screen.dart';
 import 'Screen/login_screen.dart';
+import 'Screen/signup_screen.dart';
 
 ////vien
 void main() async {
@@ -36,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/login',
+      initialRoute: '/',
       routes: {
         '/': (context) => const Home_Screen(),
         '/forget': (context) => const ForgetPassword_Screen(),
