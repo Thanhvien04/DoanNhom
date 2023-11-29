@@ -1,3 +1,4 @@
+import 'package:doan/Screen/phone.dart';
 import 'package:flutter/material.dart';
 import 'forget_screen.dart';
 import 'home_screen.dart';
@@ -12,6 +13,8 @@ class Login_screen extends StatefulWidget {
 }
 
 class _Login_screenState extends State<Login_screen> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   static Future<User?> loginUsingEmailPassword(
       {required String email,
       required String password,
@@ -64,6 +67,9 @@ class _Login_screenState extends State<Login_screen> {
                   height: 350,
                   width: 500,
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                   controller: _email,
                   cursorColor: Colors.white,
@@ -110,7 +116,7 @@ class _Login_screenState extends State<Login_screen> {
                       )),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 3,
                 ),
                 Text(
                   value,
@@ -118,7 +124,7 @@ class _Login_screenState extends State<Login_screen> {
                       color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 1,
                 ),
                 ElevatedButton(
                     style: const ButtonStyle(
@@ -130,6 +136,8 @@ class _Login_screenState extends State<Login_screen> {
                           password: _password.text,
                           context: context);
                       print(user);
+                      print("$_email");
+                      print("$_password");
                       if (user != null) {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const Home_Screen()));
@@ -148,6 +156,23 @@ class _Login_screenState extends State<Login_screen> {
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     )),
+                const SizedBox(
+                  height: 30,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyPhone()));
+                  },
+                  child: const Text(
+                    "Log in with SMS",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -208,7 +233,11 @@ class _Login_screenState extends State<Login_screen> {
             text: const TextSpan(
                 text: "Forget Password",
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.redAccent,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.red,
+                    decorationStyle: TextDecorationStyle.solid,
+                    backgroundColor: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 16)),
           ),

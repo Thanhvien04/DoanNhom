@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:doan/Screen/phone.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
 import 'login_screen.dart';
 
 class Signup_screen extends StatefulWidget {
@@ -53,27 +51,6 @@ class _Signup_screenState extends State<Signup_screen> {
                 ),
                 const SizedBox(
                   height: 20,
-                ),
-                TextFormField(
-                  controller: _phonecontroller,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: "Enter Phone",
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.9)),
-                      fillColor: Colors.white.withOpacity(0.3),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: const BorderSide(
-                              width: 0,
-                              color: Colors.white,
-                              style: BorderStyle.none)),
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.white70,
-                      )),
                 ),
                 const SizedBox(
                   height: 20,
@@ -136,7 +113,56 @@ class _Signup_screenState extends State<Signup_screen> {
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
-                      _registerAndSaveToRealtimeDatabase();
+                      if (_emailcontroller.text.isEmpty ||
+                          _passwordcontroller.text.isEmpty) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                    'Vui lòng nhập đầy đủ thông tin'),
+                                icon: const Icon(
+                                  Icons.warning,
+                                  color: Colors.yellow,
+                                  size: 50,
+                                ),
+                                actions: [
+                                  SizedBox(
+                                    width: 300,
+                                    height: 50,
+                                    child: FloatingActionButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Signup_screen()));
+                                      },
+                                      backgroundColor: Colors.purple,
+                                      child: const Text(
+                                        "Ok",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            });
+                      } else {
+                        FirebaseAuth.instance.createUserWithEmailAndPassword(
+                          email: _emailcontroller.text,
+                          password: _passwordcontroller.text,
+                        );
+
+                        print("email+$_emailcontroller");
+                        print("password+$_passwordcontroller");
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Login_screen()));
+                      }
                       FirebaseAuth.instance.createUserWithEmailAndPassword(
                         email: _emailcontroller.text,
                         password: _passwordcontroller.text,
@@ -144,7 +170,7 @@ class _Signup_screenState extends State<Signup_screen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const MyPhone()));
+                              builder: (context) => Login_screen()));
                     },
                     child: const Text(
                       "Sign Up",
@@ -171,7 +197,7 @@ class _Signup_screenState extends State<Signup_screen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Login_screen()));
+                                  builder: (context) => Login_screen()));
                         },
                         child: RichText(
                           text: const TextSpan(
@@ -215,3 +241,4 @@ class _Signup_screenState extends State<Signup_screen> {
     }
   }
 }
+
