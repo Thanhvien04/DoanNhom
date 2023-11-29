@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:doan/Screen/Otp_Screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
@@ -19,13 +22,12 @@ class _Signup_screenState extends State<Signup_screen> {
     return Color(int.parse(hexColor, radix: 16));
   }
 
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  // ignore: unused_field
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String kq = '';
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _phonecontroller = TextEditingController();
+  File? _image = File('asset/h2.jpg');
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class _Signup_screenState extends State<Signup_screen> {
             child: Column(
               children: [
                 Image.asset(
-                  "asset/nha.png",
+                  "asset/h1.png",
                   fit: BoxFit.fitWidth,
                   height: 300,
                   width: 500,
@@ -135,6 +137,7 @@ class _Signup_screenState extends State<Signup_screen> {
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
+                      _registerAndSaveToRealtimeDatabase();
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => OtpScreen()));
                     },
@@ -183,5 +186,28 @@ class _Signup_screenState extends State<Signup_screen> {
         ),
       ),
     );
+  }
+
+  void _registerAndSaveToRealtimeDatabase() {
+    String phone = _phonecontroller.text;
+    String email = _emailcontroller.text;
+    String password = _passwordcontroller.text;
+    String? image = _image?.path;
+
+    try {
+      DatabaseReference databaseReference =
+          // ignore: deprecated_member_use
+          FirebaseDatabase.instance.reference();
+      databaseReference.child('users').push().set({
+        'phone': phone,
+        'email': email,
+        'password': password,
+        'image': image
+      });
+
+      print('Dữ liệu đã được gửi lên Realtime Database');
+    } catch (e) {
+      print('Lỗi khi gửi dữ liệu lên Realtime Database: $e');
+    }
   }
 }

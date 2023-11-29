@@ -61,8 +61,6 @@ class _Login_screenState extends State<Login_screen> {
   var provider;
   @override
   Widget build(BuildContext context) {
-    // Key:
-    // _formkey;
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,

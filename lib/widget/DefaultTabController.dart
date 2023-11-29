@@ -169,7 +169,9 @@ class _defaultTabControllerState extends State<defaultTabController> {
             length: widget.lst_room.length,
             child: Column(children: [
               TabBar(
-                tabs: widget.lst_room.map((e) => Text(e.name)).toList(),
+                tabs: widget.lst_room
+                    .map((e) => Text(e.name))
+                    .toList(),
                 isScrollable: true,
               ),
               Container(
