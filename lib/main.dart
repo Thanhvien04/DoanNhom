@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     return firebaseApp;
   }
-
   const MyApp({super.key});
 
   @override
