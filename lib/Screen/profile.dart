@@ -87,8 +87,10 @@ class _ProfileState extends State<Profile> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => setting()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Setting_screen()));
                   },
                   child: const CircleAvatar(
                     radius: 150,

@@ -17,8 +17,6 @@ class Login_screen extends StatefulWidget {
 }
 
 class _Login_screenState extends State<Login_screen> {
-  // ignore: deprecated_member_use
-
   static Future<User?> loginUsingEmailPassword(
       {required String email,
       required String password,
@@ -241,5 +239,4 @@ class _Login_screenState extends State<Login_screen> {
           ),
         ));
   }
-  // ignore: deprecated_member_use
 }
