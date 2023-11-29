@@ -156,7 +156,6 @@ class _Home_ScreenState extends State<Home_Screen> {
             delete: false,
             name: room.child('name').value.toString());
         lst_room.add(roomnew);
-
         setState(() {
           lstRoom = lst_room;
         });
@@ -170,7 +169,7 @@ class _Home_ScreenState extends State<Home_Screen> {
     }
   }
 
-  void addRoom(Room room) {
+  Future<void> addRoom(Room room) async {
     var list_device = [];
     room.lstDevice.forEach((device) {
       var _device = {
@@ -189,12 +188,32 @@ class _Home_ScreenState extends State<Home_Screen> {
       "id": room.id,
       "delete": room.delete
     };
+    bool flag=false;
+    final response = await FirebaseDatabase.instance.ref().child("room").get();
+    for (DataSnapshot _room in response.children) {
+      if (_room.child("delete").value.toString() == true.toString()) {
+        if (_room.child("name").value.toString().toLowerCase() ==
+            room.name.toLowerCase()) {
+          final ref1 = FirebaseDatabase.instance.ref().child("room");
+          ref1
+              .child(_room.child("id").value.toString())
+              .update({"delete": false}).then((value) {
+            print("Thêm phòng thành công");
+            flag=true;
+          }).catchError((onError) {
+            print('Thêm phòng không thành công');
+          });
+        }
+      }
+    }
+    if(flag==false){
     var ref = FirebaseDatabase.instance.ref().child("room");
     ref.child(room.id.toString()).set(_room).then((room) {
       print('Thêm thành công');
     }).catchError((onError) {
       print('Thêm không thành công');
     });
+    }
   }
 
   @override

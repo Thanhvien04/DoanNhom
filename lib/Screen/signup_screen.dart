@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:doan/Screen/phone.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'login_screen.dart';
@@ -135,6 +136,7 @@ class _Signup_screenState extends State<Signup_screen> {
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
                     onPressed: () {
+                      _registerAndSaveToRealtimeDatabase();
                       FirebaseAuth.instance.createUserWithEmailAndPassword(
                         email: _emailcontroller.text,
                         password: _passwordcontroller.text,
@@ -189,5 +191,27 @@ class _Signup_screenState extends State<Signup_screen> {
         ),
       ),
     );
+  }
+    void _registerAndSaveToRealtimeDatabase() {
+    String phone = _phonecontroller.text;
+    String email = _emailcontroller.text;
+    String password = _passwordcontroller.text;
+    String? image = _image?.path;
+
+    try {
+      DatabaseReference databaseReference =
+          // ignore: deprecated_member_use
+          FirebaseDatabase.instance.reference();
+      databaseReference.child('users').push().set({
+        'phone': phone,
+        'email': email,
+        'password': password,
+        'image': image
+      });
+
+      print('Dữ liệu đã được gửi lên Realtime Database');
+    } catch (e) {
+      print('Lỗi khi gửi dữ liệu lên Realtime Database: $e');
+    }
   }
 }
