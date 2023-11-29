@@ -100,7 +100,7 @@ class _settingState extends State<setting> {
               else
                 CircleAvatar(
                   radius: 120,
-                  backgroundImage: AssetImage('asset/h2.jpg'),
+                  backgroundImage: AssetImage('asset/h2.png'),
                 ),
               ElevatedButton(
                   child: Text(

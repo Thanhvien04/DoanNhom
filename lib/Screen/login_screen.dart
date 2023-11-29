@@ -1,21 +1,24 @@
-import 'package:doan/Screen/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:doan/login/login.dart';
 import 'package:provider/provider.dart';
+import 'forget_screen.dart';
 import 'home_screen.dart';
 import 'signup_screen.dart';
 import 'setting.dart';
 import 'package:doan/login/login.dart';
 
-class Login_interface extends StatefulWidget {
-  const Login_interface({super.key});
+class Login_screen extends StatefulWidget {
+  const Login_screen({super.key});
 
   @override
-  State<Login_interface> createState() => _Login_interfaceState();
+  State<Login_screen> createState() => _Login_screenState();
 }
 
-class _Login_interfaceState extends State<Login_interface> {
+class _Login_screenState extends State<Login_screen> {
+  // ignore: deprecated_member_use
+
   static Future<User?> loginUsingEmailPassword(
       {required String email,
       required String password,
@@ -78,7 +81,7 @@ class _Login_interfaceState extends State<Login_interface> {
             child: Column(
               children: [
                 Image.asset(
-                  "asset/h1.jpg",
+                  "asset/h1.png",
                   fit: BoxFit.fitWidth,
                   height: 350,
                   width: 500,
@@ -110,7 +113,6 @@ class _Login_interfaceState extends State<Login_interface> {
                 ),
                 TextFormField(
                   controller: _password,
-                  // focusNode: PasswordPocus,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       filled: true,
@@ -126,7 +128,7 @@ class _Login_interfaceState extends State<Login_interface> {
                               color: Colors.white,
                               style: BorderStyle.none)),
                       prefixIcon: const Icon(
-                        Icons.person,
+                        Icons.lock,
                         color: Colors.white70,
                       )),
                 ),
@@ -138,50 +140,9 @@ class _Login_interfaceState extends State<Login_interface> {
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold),
                 ),
-                // ChangeNotifierProvider(
-                //   create: (_) => logincontroler(),
-                //   child: Consumer<logincontroler>(
-                //       builder: (context, provider, child) {
-                //     return ElevatedButton(
-                //         onPressed: () {
-                //           Navigator.of(context).pushReplacement(
-                //               MaterialPageRoute(
-                //                   builder: (contnnext) => Profile()));
-
-                //           if (_formkey.currentState!.validate()) {
-                //             provider.login(
-                //                 context, _email.text, _password.text);
-                //           }
-                //         },
-                //         child: const Text(
-                //           "Login",
-                //           style: TextStyle(
-                //               fontSize: 20,
-                //               fontWeight: FontWeight.bold,
-                //               color: Colors.red),
-                //         ));
-                //   }),
-                // ),
-                // ElevatedButton(
-                //     style: const ButtonStyle(
-                //         backgroundColor:
-                //             MaterialStatePropertyAll(Colors.white70)),
-                //     onPressed: () async {
-                //       User? user = await loginUsingEmailPassword(
-                //           email: _email.text,
-                //           password: _password.text,
-                //           context: context);
-                //       print(user);
-                //       if (user != null) {
-                //         Navigator.pushNamed(context, '/profile');
-                //       } else {
-                //         setState(() {
-                //           value = "Username or Password not Invalible !!";
-                //         });
-                //         print("Username or Password not Invalible !!");
-                //       }
-                //       ;
-                //     },
+                const SizedBox(
+                  height: 8,
+                ),
                 ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
@@ -193,16 +154,17 @@ class _Login_interfaceState extends State<Login_interface> {
                           password: _password.text,
                         );
                         //print(user);
-                        if (user != null) {
-                          _email.clear();
-                          _password.clear();
-                          Navigator.pushNamed(context, '/profile');
-                        } else {
-                          setState(() {
-                            value = "Username or Password not Invalible !!";
-                          });
-                          print("Username or Password not Invalible !!");
-                        }
+                        // if (user != null) {
+                        //   _email.clear();
+                        //   _password.clear();
+                        Navigator.pushNamed(context, '/profile');
+                        //} else {
+                        //   setState(() {
+                        value = "Username or Password not Invalible !!";
+
+                        /// });
+                        //print("Username or Password not Invalible !!");
+                        // }
                         ;
                       } catch (e) {}
                     },
@@ -213,6 +175,10 @@ class _Login_interfaceState extends State<Login_interface> {
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     )),
+                const SizedBox(
+                  height: 8,
+                ),
+                forgetPassword(context),
                 Padding(
                   padding: const EdgeInsets.only(right: 30, top: 10),
                   child: Row(
@@ -231,7 +197,7 @@ class _Login_interfaceState extends State<Login_interface> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Signup_interface()));
+                                  builder: (context) => const Signup_screen()));
                         },
                         child: RichText(
                           text: const TextSpan(
@@ -252,4 +218,28 @@ class _Login_interfaceState extends State<Login_interface> {
       ),
     );
   }
+
+  Widget forgetPassword(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        height: 20,
+        alignment: Alignment.bottomRight,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ForgetPassword_Screen()));
+          },
+          child: RichText(
+            text: const TextSpan(
+                text: "Forget Password",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16)),
+          ),
+        ));
+  }
+  // ignore: deprecated_member_use
 }
