@@ -197,48 +197,50 @@
 //   Widget build(BuildContext context) {
 //     loadRoom();
 //     return Scaffold(
-//       //   body: Row(
-//       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//       // children: [
-//       //   Container(
-//       //     margin: const EdgeInsets.only(left: 10),
-//       //     width: MediaQuery.of(context).size.width / 2,
-//       //     child: Column(
-//       //       crossAxisAlignment: CrossAxisAlignment.start,
-//       //       children: [
-//       //         SizedBox(
-//       //           width: MediaQuery.of(context).size.width / 2.7,
-//       //           child: MaterialButton(
-//       //             height: 40,
-//       //             onPressed: () {},
-//       //             color: Colors.red,
-//       //             child: const Text('Báo cháy'),
-//       //           ),
-//       //         ),
-//       //         SizedBox(
-//       //           width: MediaQuery.of(context).size.width / 2.7,
-//       //           child: MaterialButton(
-//       //             height: 40,
-//       //             onPressed: () {
-//       //               turnOffAllLights();
-//       //             },
-//       //             color: Colors.blue,
-//       //             child: const Text('Tắt hết đèn'),
-//       //           ),
-//       //         ),
-//       //         SizedBox(
-//       //           width: MediaQuery.of(context).size.width / 2.7,
-//       //           child: MaterialButton(
-//       //             height: 40,
-//       //             onPressed: () => showDialog<String>(
-//       //               context: context,
-//       //               builder: (BuildContext context) => AlertDialog(
-//       //                 title: const Text('Thêm phòng'),
-//       //                 content: TextField(
-//       //                   controller: txt_RoomName,
-//       //                   decoration: const InputDecoration(
-//       //                     labelText: "Nhập tên phòng",
-//        appBar: AppBar(
+// <<<<<<< HEAD
+//         body: Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         Container(
+//           margin: const EdgeInsets.only(left: 10),
+//           width: MediaQuery.of(context).size.width / 2,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               SizedBox(
+//                 width: MediaQuery.of(context).size.width / 2.7,
+//                 child: MaterialButton(
+//                   height: 40,
+//                   onPressed: () {},
+//                   color: Colors.red,
+//                   child: const Text('Báo cháy'),
+//                 ),
+//               ),
+//               SizedBox(
+//                 width: MediaQuery.of(context).size.width / 2.7,
+//                 child: MaterialButton(
+//                   height: 40,
+//                   onPressed: () {
+//                     turnOffAllLights();
+//                   },
+//                   color: Colors.blue,
+//                   child: const Text('Tắt hết đèn'),
+//                 ),
+//               ),
+//               SizedBox(
+//                 width: MediaQuery.of(context).size.width / 2.7,
+//                 child: MaterialButton(
+//                   height: 40,
+//                   onPressed: () => showDialog<String>(
+//                     context: context,
+//                     builder: (BuildContext context) => AlertDialog(
+//                       title: const Text('Thêm phòng'),
+//                       content: TextField(
+//                         controller: txt_RoomName,
+//                         decoration: const InputDecoration(
+//                           labelText: "Nhập tên phòng",
+// =======
+//         appBar: AppBar(
 //             title: const Text('Trang chủ'),
 //             backgroundColor: Colors.blue,
 //             automaticallyImplyLeading: false),
@@ -268,6 +270,7 @@
 //                           onPressed: () {},
 //                           color: Colors.red,
 //                           child: const Text('Báo cháy'),
+// >>>>>>> e95a4e74d974468af9b2d3a3b31f4fd830670fe7
 //                         ),
 //                       ),
 //                       actions: <Widget>[
@@ -283,8 +286,10 @@
 //                           },
 //                           child: const Text('Thêm'),
 //                         ),
+// <<<<<<< HEAD
 //                       ],
-//               ]),
+// =======
+//                       ),
 //                       SizedBox(
 //                         width: MediaQuery.of(context).size.width / 2.7,
 //                         child: MaterialButton(
@@ -320,9 +325,9 @@
 //                           child: const Text('Thêm phòng'),
 //                         ),
 //                       ),
-//             )],
+//                     ],
 //                   ),
-//             ]),
+//                 ),
 //                 SizedBox(
 //                   width: MediaQuery.of(context).size.width / 2.2,
 //                   child: Column(children: [
@@ -337,15 +342,16 @@
 //                           _currentSliderValue = value;
 //                         });
 //                       },
+// >>>>>>> e95a4e74d974468af9b2d3a3b31f4fd830670fe7
 //                     ),
-//             ]),
+//                   ),
 //                   color: Colors.blue,
 //                   child: const Text('Thêm phòng'),
 //                 ),
 //               ),
-        
-//           );
-        
+//             ],
+//           ),
+//         ),
 //         SizedBox(
 //           width: MediaQuery.of(context).size.width / 2.2,
 //           child: Column(children: [
