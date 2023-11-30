@@ -211,6 +211,15 @@ class _Home_ScreenState extends State<Home_Screen> {
           }).catchError((onError) {
             print('Thêm phòng không thành công');
           });
+          final ref2 = FirebaseDatabase.instance.ref().child("room");
+          ref2
+              .child(_room.child("id").value.toString()).child("lstDevice")
+              .set(list_device)
+              .then((value) {
+            print("Sửa lại thiết bị thành công");
+          }).catchError((onError) {
+            print('Sửa lại thiết bị không thành công');
+          });
         }
       }
     }
