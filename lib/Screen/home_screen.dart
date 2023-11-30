@@ -96,11 +96,13 @@ class _Home_ScreenState extends State<Home_Screen> {
 
   Future<void> loadRoom() async {
     int i;
+    bool flag = false;
     List<Room> lst_room = [];
     final response = await FirebaseDatabase.instance.ref().child("room").get();
     for (DataSnapshot room in response.children) {
       List<Device> lst_device = [];
       if (room.child("delete").value.toString() == false.toString()) {
+        flag = true;
         for (i = 0; i < room.child("lstDevice").children.length; i++) {
           if (room
                   .child("lstDevice")
@@ -167,6 +169,12 @@ class _Home_ScreenState extends State<Home_Screen> {
         }
       }
     }
+    if (flag == false) {
+      setState(() {
+        lstRoom = [];
+      });
+      lstRoom = [];
+    }
   }
 
   Future<void> addRoom(Room room) async {
@@ -188,31 +196,31 @@ class _Home_ScreenState extends State<Home_Screen> {
       "id": room.id,
       "delete": room.delete
     };
-    bool flag=false;
+    bool flag = false;
     final response = await FirebaseDatabase.instance.ref().child("room").get();
     for (DataSnapshot _room in response.children) {
       if (_room.child("delete").value.toString() == true.toString()) {
         if (_room.child("name").value.toString().toLowerCase() ==
             room.name.toLowerCase()) {
+          flag = true;
           final ref1 = FirebaseDatabase.instance.ref().child("room");
           ref1
               .child(_room.child("id").value.toString())
               .update({"delete": false}).then((value) {
             print("Thêm phòng thành công");
-            flag=true;
           }).catchError((onError) {
             print('Thêm phòng không thành công');
           });
         }
       }
     }
-    if(flag==false){
-    var ref = FirebaseDatabase.instance.ref().child("room");
-    ref.child(room.id.toString()).set(_room).then((room) {
-      print('Thêm thành công');
-    }).catchError((onError) {
-      print('Thêm không thành công');
-    });
+    if (flag == false) {
+      var ref = FirebaseDatabase.instance.ref().child("room");
+      ref.child(room.id.toString()).set(_room).then((room) {
+        print('Thêm thành công');
+      }).catchError((onError) {
+        print('Thêm không thành công');
+      });
     }
   }
 
@@ -303,30 +311,57 @@ class _Home_ScreenState extends State<Home_Screen> {
                         width: MediaQuery.of(context).size.width / 2.7,
                         child: MaterialButton(
                           height: 40,
-                          onPressed: () => showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Xóa phòng'),
-                              content: SizedBox(
-                                height: 100,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: lstRoom
-                                        .map((room) => lstRoomDel(room))
-                                        .toList(),
-                                  ),
-                                ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          ),
+                          onPressed: () {
+                            lstRoom.length != 0
+                                ? showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text('Xóa phòng'),
+                                      content: SizedBox(
+                                        height: 100,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: lstRoom
+                                                .map((room) => lstRoomDel(room))
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              Navigator.of(context).pop();
+                                            });
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text('Xóa phòng'),
+                                      content: const SizedBox(
+                                        height: 100,
+                                        child: Text('Không có phòng để xóa'),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              Navigator.of(context).pop();
+                                            });
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                          },
                           color: Colors.blue,
                           child: const Text('Xóa phòng'),
                         ),
