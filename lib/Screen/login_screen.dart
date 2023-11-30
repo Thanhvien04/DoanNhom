@@ -1,3 +1,4 @@
+import 'package:doan/Screen/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,10 @@ class _Login_screenState extends State<Login_screen> {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      user = userCredential.user;
+      user = userCredential.user!;
+      String userId = user.uid;
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Profile()));
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
         print("No user found that email");
@@ -153,7 +157,6 @@ class _Login_screenState extends State<Login_screen> {
                         // if (user != null) {
                         //   _email.clear();
                         //   _password.clear();
-                        Navigator.pushNamed(context, '/profile');
                         //} else {
                         //   setState(() {
                         value = "Username or Password not Invalible !!";

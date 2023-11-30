@@ -18,6 +18,7 @@ class _ProfileState extends State<Profile> {
   // ignore: deprecated_member_use
   DatabaseReference database = FirebaseDatabase.instance.reference();
   User? _user;
+
   String _phoneNumber = '';
   String _email = '';
   String _password = '';
@@ -26,8 +27,8 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
 
-    _getCurrentUser();
     getUserData();
+    _getCurrentUser();
   }
 
   void _getCurrentUser() {
