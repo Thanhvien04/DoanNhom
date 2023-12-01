@@ -28,7 +28,7 @@ hexStringToColor(String hexColor) {
 bool roomIsEmpty = true;
 TextEditingController txt_RoomName = TextEditingController();
 List<Room> lstRoom = [];
-List<Room> lstRoom_sort = [];
+List<Room> lstRoomFull = [];
 int getIndex0(List<Device> lst) {
   int index = 0;
   Device dv;
@@ -98,6 +98,7 @@ class _Home_ScreenState extends State<Home_Screen> {
     int i;
     bool flag = false;
     List<Room> lst_room = [];
+    List<Room> lst_room1 = [];
     final response = await FirebaseDatabase.instance.ref().child("room").get();
     for (DataSnapshot room in response.children) {
       List<Device> lst_device = [];
@@ -158,22 +159,82 @@ class _Home_ScreenState extends State<Home_Screen> {
             delete: false,
             name: room.child('name').value.toString());
         lst_room.add(roomnew);
+        lst_room1.add(roomnew);
         setState(() {
           lstRoom = lst_room;
+          lstRoomFull = lst_room1;
         });
-
-        if (lstRoom_sort.isNotEmpty) {
+        if (lstRoom.isNotEmpty) {
           roomIsEmpty = false;
         } else {
           roomIsEmpty = true;
         }
+      }
+      if (room.child("delete").value.toString() == true.toString()) {
+        for (i = 0; i < room.child("lstDevice").children.length; i++) {
+          if (room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("delete")
+                  .value
+                  .toString() ==
+              false.toString()) {
+            Device dv = Device(
+                id: int.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("id")
+                    .value
+                    .toString()),
+                stt: bool.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("stt")
+                    .value
+                    .toString()),
+                name: room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("name")
+                    .value
+                    .toString(),
+                img: room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("img")
+                    .value
+                    .toString(),
+                id_room: int.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("id_room")
+                    .value
+                    .toString()),
+                delete: bool.parse(room
+                    .child("lstDevice")
+                    .child("$i")
+                    .child("delete")
+                    .value
+                    .toString()));
+
+            lst_device.add(dv);
+          }
+        }
+        Room roomnew = Room(
+            id: int.parse(room.child('id').value.toString()),
+            lstDevice: lst_device,
+            delete: false,
+            name: room.child('name').value.toString());
+        lst_room1.add(roomnew);
+        setState(() {
+          lstRoomFull = lst_room1;
+        });
       }
     }
     if (flag == false) {
       setState(() {
         lstRoom = [];
       });
-      lstRoom = [];
     }
   }
 
@@ -213,7 +274,8 @@ class _Home_ScreenState extends State<Home_Screen> {
           });
           final ref2 = FirebaseDatabase.instance.ref().child("room");
           ref2
-              .child(_room.child("id").value.toString()).child("lstDevice")
+              .child(_room.child("id").value.toString())
+              .child("lstDevice")
               .set(list_device)
               .then((value) {
             print("Sửa lại thiết bị thành công");
@@ -233,6 +295,17 @@ class _Home_ScreenState extends State<Home_Screen> {
     }
   }
 
+  int getIDRoom(String name) {
+    int index = lstRoomFull.length;
+    lstRoomFull.forEach((room) {
+      if (room.name == txt_RoomName.text) {
+        index = room.id;
+      }
+    });
+    return index;
+  }
+
+  bool baoChay = false;
   @override
   Widget build(BuildContext context) {
     loadRoom();
@@ -301,8 +374,8 @@ class _Home_ScreenState extends State<Home_Screen> {
                                       addRoom(Room(
                                           delete: false,
                                           id: lstRoom.length,
-                                          lstDevice:
-                                              addListDevice(lstRoom.length),
+                                          lstDevice: addListDevice(
+                                              getIDRoom(txt_RoomName.text)),
                                           name: txt_RoomName.text));
                                       roomIsEmpty = false;
                                     }
@@ -397,21 +470,22 @@ class _Home_ScreenState extends State<Home_Screen> {
                       width: MediaQuery.of(context).size.width / 2.2,
                       height: 100,
                       color: Colors.black12,
-                      child: const SingleChildScrollView(
+                      child: SingleChildScrollView(
                         child: Column(
-                          children: [
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                            Text('Thông báo'),
-                          ],
-                        ),
+                            children: lstRoom
+                                .map((room) => Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: room.lstDevice
+                                        .map((device) => Text(
+                                              device.id != 0
+                                                  ? '${device.name} ${room.name.toLowerCase()} ${device.stt ? ': ON' : ': OFF'}'
+                                                  : '',
+                                              style:
+                                                  const TextStyle(fontSize: 10),
+                                            ))
+                                        .toList()))
+                                .toList()),
                       ),
                     )
                   ]),
