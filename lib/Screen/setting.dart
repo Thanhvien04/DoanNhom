@@ -49,46 +49,6 @@ class _Setting_screenState extends State<Setting_screen> {
     }
   }
 
-  //String? _currentEmail;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initializeFlutterFire();
-  // }
-
-  // void initializeFlutterFire() async {
-  //   await Firebase.initializeApp();
-  //   _auth = FirebaseAuth.instance;
-  //   getCurrentUserEmail();
-  // }
-
-  // void getCurrentUserEmail() async {
-  //   User? currentUser = _auth.currentUser;
-  //   if (currentUser != null) {
-  //     setState(() {
-  //       _currentEmail = currentUser.email;
-  //       _Email.text = _currentEmail ?? '';
-  //     });
-  //   }
-  // }
-
-  // void _updateEmail() async {
-  //   String newEmail = _Email.text;
-  //   User? currentUser = _auth.currentUser;
-  //   if (currentUser != null) {
-  //     try {
-  //       await currentUser.updateEmail(newEmail);
-  //       setState(() {
-  //         _currentEmail = newEmail;
-  //       });
-  //       print('Địa chỉ email đã được cập nhật thành công');
-  //     } catch (e) {
-  //       print('Lỗi khi cập nhật địa chỉ email: $e');
-  //     }
-  //   }
-  // }
-
   bool _obscureText = true;
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
@@ -100,7 +60,6 @@ class _Setting_screenState extends State<Setting_screen> {
 
   @override
   Widget build(BuildContext context) {
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${_Email}");
     return Scaffold(
         body: SafeArea(
             child: Container(
@@ -210,61 +169,6 @@ class _Setting_screenState extends State<Setting_screen> {
               const SizedBox(
                 height: 20,
               ),
-              TextFormField(
-                controller: _password,
-                obscureText: _obscureText,
-                decoration: InputDecoration(
-                  labelText: "Password...",
-                  filled: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  labelStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                      borderSide: const BorderSide(
-                          width: 1,
-                          color: Colors.black,
-                          style: BorderStyle.none)),
-                  prefixIcon: const Icon(
-                    Icons.lock_open,
-                    color: Colors.black,
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              // TextFormField(
-              //   controller: _Email,
-              //   decoration: InputDecoration(
-              //       labelText: "Email",
-              //       filled: true,
-              //       floatingLabelBehavior: FloatingLabelBehavior.never,
-              //       labelStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-              //       border: OutlineInputBorder(
-              //           borderRadius: BorderRadius.circular(25),
-              //           borderSide: const BorderSide(
-              //               width: 1,
-              //               color: Colors.black,
-              //               style: BorderStyle.none)),
-              //       prefixIcon: const Icon(
-              //         Icons.email,
-              //         color: Colors.black,
-              //       )),
-              // ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
               Center(
                   child: Row(children: [
                 const Padding(padding: EdgeInsets.all(30)),
@@ -303,12 +207,7 @@ class _Setting_screenState extends State<Setting_screen> {
                                           FirebaseAuth.instance.currentUser
                                               ?.updateDisplayName(
                                                   _username.text);
-                                          // FirebaseAuth.instance.currentUser
-                                          //     ?.updatePassword(_password.text);
-                                          // FirebaseAuth.instance.currentUser!
-                                          //     .updateEmail(_Email.text);
                                         });
-                                        //  _updateEmail();
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
