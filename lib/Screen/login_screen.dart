@@ -15,29 +15,7 @@ class Login_screen extends StatefulWidget {
 class _Login_screenState extends State<Login_screen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  // static Future<User?> loginUsingEmailPassword(
-  //     {required String email,
-  //     required String password,
-  //     required BuildContext context}) async {
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-  //   User? user;
-  //   try {
-  //     UserCredential userCredential = await auth.signInWithEmailAndPassword(
-  //         email: email, password: password);
-  //     user = userCredential.user!;
-  //     String userId = user.uid;
-  //     Navigator.push(
-  //         context, MaterialPageRoute(builder: (context) => Profile()));
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == "user-not-found") {
-  //       print("No user found that email");
-  //     }
-  //   }
-  //   return user;
-  // }
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //final _formkey = GlobalKey<FormState>();
   String value = '';
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();

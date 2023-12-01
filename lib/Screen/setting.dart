@@ -147,25 +147,25 @@ class _Setting_screenState extends State<Setting_screen> {
                           });
                     }),
                 const SizedBox(height: 20),
-                TextFormField(
-                    controller: _username,
-                    decoration: InputDecoration(
-                        labelText: "User name",
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelStyle: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.none)),
-                        prefixIcon: const Icon(
-                          Icons.phone_android,
-                          color: Colors.black,
-                        ))),
+                // TextFormField(
+                //     controller: _username,
+                //     decoration: InputDecoration(
+                //         labelText: "User name",
+                //         filled: true,
+                //         floatingLabelBehavior: FloatingLabelBehavior.never,
+                //         labelStyle: TextStyle(
+                //           color: Colors.black.withOpacity(0.5),
+                //         ),
+                //         border: OutlineInputBorder(
+                //             borderRadius: BorderRadius.circular(25),
+                //             borderSide: const BorderSide(
+                //                 width: 1,
+                //                 color: Colors.black,
+                //                 style: BorderStyle.none)),
+                //         prefixIcon: const Icon(
+                //           Icons.phone_android,
+                //           color: Colors.black,
+                //         ))),
                 const SizedBox(
                   height: 20,
                 ),
@@ -202,18 +202,18 @@ class _Setting_screenState extends State<Setting_screen> {
                                     const Padding(padding: EdgeInsets.all(10)),
                                     TextButton(
                                         onPressed: () {
-                                          FirebaseAuth.instance
-                                              .setSettings()
-                                              .then((value) {
-                                            FirebaseAuth.instance.currentUser
-                                                ?.updateDisplayName(
-                                                    _username.text);
-                                          });
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const Profile_screen()));
+                                          //       FirebaseAuth.instance
+                                          //           .setSettings()
+                                          //           .then((value) {
+                                          //         FirebaseAuth.instance.currentUser
+                                          //             ?.updateDisplayName(
+                                          //                 _username.text);
+                                          //       });
+                                          //       Navigator.push(
+                                          //           context,
+                                          //           MaterialPageRoute(
+                                          //               builder: (context) =>
+                                          //                   const Profile_screen()));
                                         },
                                         child: const Text(
                                           "Ok",
