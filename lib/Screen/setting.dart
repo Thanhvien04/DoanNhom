@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:doan/Screen/profile_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -13,20 +14,17 @@ class Setting_screen extends StatefulWidget {
 }
 
 class _Setting_screenState extends State<Setting_screen> {
-  TextEditingController contactEmail = TextEditingController();
+  final TextEditingController _Email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _phone = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  FirebaseAuth _auth = FirebaseAuth.instance;
   File? _imagefile;
   var url;
   var url1;
   ImagePicker image = ImagePicker();
   DatabaseReference? db_ref;
   @override
-  void initState() {
-    super.initState();
-    db_ref = FirebaseDatabase.instance.ref().child('users');
-  }
-
   late User? user = FirebaseAuth.instance.currentUser;
   Future<void> _pickImage(ImageSource gallery) async {
     final pickedFiles =
@@ -51,6 +49,46 @@ class _Setting_screenState extends State<Setting_screen> {
     }
   }
 
+  //String? _currentEmail;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initializeFlutterFire();
+  // }
+
+  // void initializeFlutterFire() async {
+  //   await Firebase.initializeApp();
+  //   _auth = FirebaseAuth.instance;
+  //   getCurrentUserEmail();
+  // }
+
+  // void getCurrentUserEmail() async {
+  //   User? currentUser = _auth.currentUser;
+  //   if (currentUser != null) {
+  //     setState(() {
+  //       _currentEmail = currentUser.email;
+  //       _Email.text = _currentEmail ?? '';
+  //     });
+  //   }
+  // }
+
+  // void _updateEmail() async {
+  //   String newEmail = _Email.text;
+  //   User? currentUser = _auth.currentUser;
+  //   if (currentUser != null) {
+  //     try {
+  //       await currentUser.updateEmail(newEmail);
+  //       setState(() {
+  //         _currentEmail = newEmail;
+  //       });
+  //       print('Địa chỉ email đã được cập nhật thành công');
+  //     } catch (e) {
+  //       print('Lỗi khi cập nhật địa chỉ email: $e');
+  //     }
+  //   }
+  // }
+
   bool _obscureText = true;
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
@@ -62,6 +100,7 @@ class _Setting_screenState extends State<Setting_screen> {
 
   @override
   Widget build(BuildContext context) {
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${_Email}");
     return Scaffold(
         body: SafeArea(
             child: Container(
@@ -150,8 +189,9 @@ class _Setting_screenState extends State<Setting_screen> {
                   }),
               const SizedBox(height: 20),
               TextFormField(
-                  controller: contactEmail,
+                  controller: _username,
                   decoration: InputDecoration(
+                      labelText: "User name",
                       filled: true,
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelStyle: TextStyle(
@@ -204,26 +244,27 @@ class _Setting_screenState extends State<Setting_screen> {
               const SizedBox(
                 height: 20,
               ),
-              TextFormField(
-                controller: _phone,
-                decoration: InputDecoration(
-                    filled: true,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    labelStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: const BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.none)),
-                    prefixIcon: const Icon(
-                      Icons.email,
-                      color: Colors.black,
-                    )),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              // TextFormField(
+              //   controller: _Email,
+              //   decoration: InputDecoration(
+              //       labelText: "Email",
+              //       filled: true,
+              //       floatingLabelBehavior: FloatingLabelBehavior.never,
+              //       labelStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+              //       border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(25),
+              //           borderSide: const BorderSide(
+              //               width: 1,
+              //               color: Colors.black,
+              //               style: BorderStyle.none)),
+              //       prefixIcon: const Icon(
+              //         Icons.email,
+              //         color: Colors.black,
+              //       )),
+              // ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
               Center(
                   child: Row(children: [
                 const Padding(padding: EdgeInsets.all(30)),
@@ -256,6 +297,18 @@ class _Setting_screenState extends State<Setting_screen> {
                                   const Padding(padding: EdgeInsets.all(10)),
                                   TextButton(
                                       onPressed: () {
+                                        FirebaseAuth.instance
+                                            .setSettings()
+                                            .then((value) {
+                                          FirebaseAuth.instance.currentUser
+                                              ?.updateDisplayName(
+                                                  _username.text);
+                                          // FirebaseAuth.instance.currentUser
+                                          //     ?.updatePassword(_password.text);
+                                          // FirebaseAuth.instance.currentUser!
+                                          //     .updateEmail(_Email.text);
+                                        });
+                                        //  _updateEmail();
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(

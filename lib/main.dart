@@ -1,10 +1,7 @@
-import 'package:doan/Screen/forget_screen.dart';
-import 'package:doan/Screen/home_screen.dart';
-import 'package:doan/Screen/signup_screen.dart';
+import 'package:doan/Screen/profile_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Screen/login_screen.dart';
-import 'Screen/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +29,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           // '/': (context) => HomePage(),
-          '/profile': (context) => Profile(),
+          '/profile': (context) => Profile_screen(),
           // '/settings': (context) => SettingsPage(),
         },
         title: 'Flutter Demo',

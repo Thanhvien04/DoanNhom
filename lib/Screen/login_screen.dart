@@ -1,14 +1,9 @@
-import 'package:doan/Screen/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:doan/login/login.dart';
-import 'package:provider/provider.dart';
 import 'forget_screen.dart';
 import 'home_screen.dart';
+import 'phone.dart';
 import 'signup_screen.dart';
-import 'setting.dart';
-import 'package:doan/login/login.dart';
 
 class Login_screen extends StatefulWidget {
   const Login_screen({super.key});
@@ -18,34 +13,34 @@ class Login_screen extends StatefulWidget {
 }
 
 class _Login_screenState extends State<Login_screen> {
-  static Future<User?> loginUsingEmailPassword(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
-    try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      user = userCredential.user!;
-      String userId = user.uid;
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Profile()));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
-        print("No user found that email");
-      }
-    }
-    return user;
-  }
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  // static Future<User?> loginUsingEmailPassword(
+  //     {required String email,
+  //     required String password,
+  //     required BuildContext context}) async {
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+  //   User? user;
+  //   try {
+  //     UserCredential userCredential = await auth.signInWithEmailAndPassword(
+  //         email: email, password: password);
+  //     user = userCredential.user!;
+  //     String userId = user.uid;
+  //     Navigator.push(
+  //         context, MaterialPageRoute(builder: (context) => Profile()));
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == "user-not-found") {
+  //       print("No user found that email");
+  //     }
+  //   }
+  //   return user;
+  // }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   //final _formkey = GlobalKey<FormState>();
   String value = '';
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  final emailPocus = FocusNode();
-  final PasswordPocus = FocusNode();
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
@@ -54,15 +49,6 @@ class _Login_screenState extends State<Login_screen> {
     return Color(int.parse(hexColor, radix: 16));
   }
 
-  // @override
-  // void dispose() {
-  //   // _email.dispose();
-  //   // _password.dispose();
-  //   emailPocus.dispose();
-  //   PasswordPocus.dispose();
-  // }
-
-  var provider;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,6 +71,9 @@ class _Login_screenState extends State<Login_screen> {
                   fit: BoxFit.fitWidth,
                   height: 350,
                   width: 500,
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 TextFormField(
                   controller: _email,
@@ -133,7 +122,7 @@ class _Login_screenState extends State<Login_screen> {
                       )),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 3,
                 ),
                 Text(
                   value,
@@ -141,9 +130,16 @@ class _Login_screenState extends State<Login_screen> {
                       color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 1,
                 ),
                 ElevatedButton(
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.white70)),
@@ -153,27 +149,36 @@ class _Login_screenState extends State<Login_screen> {
                           email: _email.text,
                           password: _password.text,
                         );
-                        //print(user);
-                        // if (user != null) {
-                        //   _email.clear();
-                        //   _password.clear();
-                        //} else {
-                        //   setState(() {
-                        value = "Username or Password not Invalible !!";
-
-                        /// });
-                        //print("Username or Password not Invalible !!");
-                        // }
-                        ;
+                        // ignore: unnecessary_null_comparison
+                        if (user != null) {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const Home_Screen()));
+                        } else {
+                          setState(() {
+                            value = "Username or Password not Invalible !!";
+                          });
+                          print("Username or Password not Invalible !!");
+                        }
                       } catch (e) {}
-                    },
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    )),
+                    }),
+                const SizedBox(
+                  height: 30,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyPhone()));
+                  },
+                  child: const Text(
+                    "Log in with SMS",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -234,7 +239,11 @@ class _Login_screenState extends State<Login_screen> {
             text: const TextSpan(
                 text: "Forget Password",
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.redAccent,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.red,
+                    decorationStyle: TextDecorationStyle.solid,
+                    backgroundColor: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 16)),
           ),

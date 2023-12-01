@@ -16,7 +16,7 @@ class OtpScreen extends StatelessWidget {
           const Center(
             child: CircleAvatar(
               radius: 100,
-              backgroundImage: AssetImage("asset/nha.png"),
+              backgroundImage: AssetImage("asset/h1.png"),
             ),
           ),
           const SizedBox(
@@ -85,7 +85,7 @@ class OtpScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const Login_screen()));
+                                              Login_screen()));
                                 },
                                 backgroundColor: Colors.purple,
                                 child: const Text(

@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:doan/Screen/Otp_Screen.dart';
+import 'package:doan/Screen/phone.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
+import 'otp_screen.dart';
 
 class Signup_screen extends StatefulWidget {
   const Signup_screen({super.key});
@@ -27,6 +28,7 @@ class _Signup_screenState extends State<Signup_screen> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _phonecontroller = TextEditingController();
+  final TextEditingController _username = TextEditingController();
   File? _image = File('asset/h2.jpg');
 
   @override
@@ -56,11 +58,11 @@ class _Signup_screenState extends State<Signup_screen> {
                   height: 20,
                 ),
                 TextFormField(
-                  controller: _phonecontroller,
+                  controller: _username,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       filled: true,
-                      labelText: "Enter Phone",
+                      labelText: "User name",
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelStyle:
                           TextStyle(color: Colors.white.withOpacity(0.9)),
@@ -96,7 +98,7 @@ class _Signup_screenState extends State<Signup_screen> {
                               color: Colors.white,
                               style: BorderStyle.none)),
                       prefixIcon: const Icon(
-                        Icons.person,
+                        Icons.email,
                         color: Colors.white70,
                       )),
                 ),
@@ -140,6 +142,72 @@ class _Signup_screenState extends State<Signup_screen> {
                       _registerAndSaveToRealtimeDatabase();
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => OtpScreen()));
+                      if (_emailcontroller.text.isEmpty ||
+                          _passwordcontroller.text.isEmpty) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                    'Vui lòng nhập đầy đủ thông tin'),
+                                icon: const Icon(
+                                  Icons.warning,
+                                  color: Colors.yellow,
+                                  size: 50,
+                                ),
+                                actions: [
+                                  SizedBox(
+                                    width: 300,
+                                    height: 50,
+                                    child: FloatingActionButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Signup_screen()));
+                                      },
+                                      backgroundColor: Colors.purple,
+                                      child: const Text(
+                                        "Ok",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            });
+                      } else {
+                        FirebaseAuth.instance.createUserWithEmailAndPassword(
+                          email: _emailcontroller.text,
+                          password: _passwordcontroller.text,
+                        );
+
+                        print("email+$_emailcontroller");
+                        print("password+$_passwordcontroller");
+
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const Login_screen()));
+                      }
+                      FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                        email: _emailcontroller.text,
+                        password: _passwordcontroller.text,
+                      )
+                          .then((value) {
+                        FirebaseAuth.instance.currentUser
+                            ?.updateDisplayName(_username.text);
+                        print("Created new account");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Login_screen()));
+                      }).onError((error, stackTrace) {
+                        print("Error ${error.toString()}");
+                      });
                     },
                     child: const Text(
                       "Sign Up",
@@ -166,7 +234,7 @@ class _Signup_screenState extends State<Signup_screen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Login_screen()));
+                                  builder: (context) => Login_screen()));
                         },
                         child: RichText(
                           text: const TextSpan(
