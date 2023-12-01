@@ -140,7 +140,6 @@ class _Signup_screenState extends State<Signup_screen> {
                           backgroundColor:
                               MaterialStatePropertyAll(Colors.white70)),
                       onPressed: () {
-                        _registerAndSaveToRealtimeDatabase();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -258,28 +257,5 @@ class _Signup_screenState extends State<Signup_screen> {
         ),
       ),
     );
-  }
-
-  void _registerAndSaveToRealtimeDatabase() {
-    String phone = _phonecontroller.text;
-    String email = _emailcontroller.text;
-    String password = _passwordcontroller.text;
-    String? image = _image?.path;
-
-    try {
-      DatabaseReference databaseReference =
-          // ignore: deprecated_member_use
-          FirebaseDatabase.instance.reference();
-      databaseReference.child('users').push().set({
-        'phone': phone,
-        'email': email,
-        'password': password,
-        'image': image
-      });
-
-      print('Dữ liệu đã được gửi lên Realtime Database');
-    } catch (e) {
-      print('Lỗi khi gửi dữ liệu lên Realtime Database: $e');
-    }
   }
 }
