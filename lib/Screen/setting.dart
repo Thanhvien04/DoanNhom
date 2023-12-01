@@ -60,214 +60,218 @@ class _Setting_screenState extends State<Setting_screen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-            child: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            hexStringToColor("CB2B93"),
-            hexStringToColor("9546c4"),
-            hexStringToColor("5E66F6"),
-          ],
+    return SafeArea(
+      child: Scaffold(
+          body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              hexStringToColor("CB2B93"),
+              hexStringToColor("9546c4"),
+              hexStringToColor("5E66F6"),
+            ],
+          ),
         ),
-      ),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              if (_imagefile != null)
-                CircleAvatar(
-                  radius: 120,
-                  backgroundImage: FileImage((_imagefile!)),
-                )
-              else
-                const CircleAvatar(
-                  radius: 120,
-                  backgroundImage: AssetImage('asset/h2.png'),
-                ),
-              ElevatedButton(
-                  child: const Text(
-                    "Change",
-                    style: TextStyle(color: Colors.black, fontSize: 15),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: <Widget>[
+                if (_imagefile != null)
+                  CircleAvatar(
+                    radius: 120,
+                    backgroundImage: FileImage((_imagefile!)),
+                  )
+                else
+                  const CircleAvatar(
+                    radius: 120,
+                    backgroundImage: AssetImage('asset/h2.png'),
                   ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Row(children: []),
-                            content: Row(children: [
-                              ElevatedButton(
-                                  onPressed: () =>
-                                      _pickImage(ImageSource.gallery),
-                                  child: const Row(children: [
-                                    Icon(
-                                      Icons.library_add,
-                                      color: Colors.black,
-                                    ),
-                                    Text(
-                                      ' Album',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ])),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              ElevatedButton(
-                                  onPressed: () => _pickImageFromCamera(),
-                                  child: const Row(children: [
-                                    Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.black,
-                                    ),
-                                    Text(
-                                      ' Camera',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ])),
-                            ]),
-                            actions: <Widget>[
-                              const Padding(padding: EdgeInsets.all(25)),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text(
-                                  'Close',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ),
-                            ],
-                          );
-                        });
-                  }),
-              const SizedBox(height: 20),
-              TextFormField(
-                  controller: _username,
-                  decoration: InputDecoration(
-                      labelText: "User name",
-                      filled: true,
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelStyle: TextStyle(
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: const BorderSide(
-                              width: 1,
-                              color: Colors.black,
-                              style: BorderStyle.none)),
-                      prefixIcon: const Icon(
-                        Icons.phone_android,
-                        color: Colors.black,
-                      ))),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                  child: Row(children: [
-                const Padding(padding: EdgeInsets.all(30)),
                 ElevatedButton(
+                    child: const Text(
+                      "Change",
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
                     onPressed: () {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Row(children: [
-                                Icon(
-                                  Icons.warning_amber,
-                                  color: Colors.redAccent,
-                                ),
-                                Text(
-                                  " Warning!",
-                                  style: TextStyle(
-                                      color: Colors.redAccent,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                              ]),
-                              content: const Text(
-                                "Are you sure about this change ?",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                              actions: <Widget>[
-                                Row(children: [
-                                  const Padding(padding: EdgeInsets.all(10)),
-                                  TextButton(
-                                      onPressed: () {
-                                        FirebaseAuth.instance
-                                            .setSettings()
-                                            .then((value) {
-                                          FirebaseAuth.instance.currentUser
-                                              ?.updateDisplayName(
-                                                  _username.text);
-                                        });
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Profile_screen()));
-                                      },
-                                      child: const Text(
-                                        "Ok",
+                              title: const Row(children: []),
+                              content: Row(children: [
+                                ElevatedButton(
+                                    onPressed: () =>
+                                        _pickImage(ImageSource.gallery),
+                                    child: const Row(children: [
+                                      Icon(
+                                        Icons.library_add,
+                                        color: Colors.black,
+                                      ),
+                                      Text(
+                                        ' Album',
                                         style: TextStyle(color: Colors.black),
-                                      )),
-                                  const Padding(padding: EdgeInsets.all(25)),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text(
-                                      'Close',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
+                                      ),
+                                    ])),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () => _pickImageFromCamera(),
+                                    child: const Row(children: [
+                                      Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.black,
+                                      ),
+                                      Text(
+                                        ' Camera',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ])),
+                              ]),
+                              actions: <Widget>[
+                                const Padding(padding: EdgeInsets.all(25)),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    'Close',
+                                    style: TextStyle(color: Colors.black),
                                   ),
-                                ])
+                                ),
                               ],
                             );
                           });
-                    },
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.white70),
-                    ),
-                    child: const Text(
-                      "Update",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 17),
-                    )),
-                const Padding(padding: EdgeInsets.all(20)),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Profile_screen(),
+                    }),
+                const SizedBox(height: 20),
+                TextFormField(
+                    controller: _username,
+                    decoration: InputDecoration(
+                        labelText: "User name",
+                        filled: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        labelStyle: TextStyle(
+                          color: Colors.black.withOpacity(0.5),
                         ),
-                      );
-                    },
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.white70),
-                    ),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: const BorderSide(
+                                width: 1,
+                                color: Colors.black,
+                                style: BorderStyle.none)),
+                        prefixIcon: const Icon(
+                          Icons.phone_android,
                           color: Colors.black,
-                          fontSize: 17),
-                    ))
-              ])),
-            ],
+                        ))),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                    child: Row(children: [
+                  const Padding(padding: EdgeInsets.all(30)),
+                  ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Row(children: [
+                                  Icon(
+                                    Icons.warning_amber,
+                                    color: Colors.redAccent,
+                                  ),
+                                  Text(
+                                    " Warning!",
+                                    style: TextStyle(
+                                        color: Colors.redAccent,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25),
+                                  ),
+                                ]),
+                                content: const Text(
+                                  "Are you sure about this change ?",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                actions: <Widget>[
+                                  Row(children: [
+                                    const Padding(padding: EdgeInsets.all(10)),
+                                    TextButton(
+                                        onPressed: () {
+                                          FirebaseAuth.instance
+                                              .setSettings()
+                                              .then((value) {
+                                            FirebaseAuth.instance.currentUser
+                                                ?.updateDisplayName(
+                                                    _username.text);
+                                          });
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Profile_screen()));
+                                        },
+                                        child: const Text(
+                                          "Ok",
+                                          style: TextStyle(color: Colors.black),
+                                        )),
+                                    const Padding(padding: EdgeInsets.all(25)),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text(
+                                        'Close',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                  ])
+                                ],
+                              );
+                            });
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.white70),
+                      ),
+                      child: const Text(
+                        "Update",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 17),
+                      )),
+                  const Padding(padding: EdgeInsets.all(20)),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Profile_screen(),
+                          ),
+                        );
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.white70),
+                      ),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 17),
+                      ))
+                ])),
+              ],
+            ),
           ),
         ),
-      ),
-    )));
+      )),
+    );
   }
 }
