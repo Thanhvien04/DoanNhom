@@ -143,7 +143,7 @@ class _Signup_screenState extends State<Signup_screen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OtpScreen()));
+                                builder: (context) => const Login_screen()));
                         if (_emailcontroller.text.isEmpty ||
                             _passwordcontroller.text.isEmpty) {
                           showDialog(
@@ -167,7 +167,7 @@ class _Signup_screenState extends State<Signup_screen> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Signup_screen()));
+                                                      const Signup_screen()));
                                         },
                                         backgroundColor: Colors.purple,
                                         child: const Text(
@@ -181,27 +181,25 @@ class _Signup_screenState extends State<Signup_screen> {
                                 );
                               });
                         } else {
-                          FirebaseAuth.instance.createUserWithEmailAndPassword(
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
                             email: _emailcontroller.text,
                             password: _passwordcontroller.text,
-                          );
+                          )
+                              .then((value) {
+                            FirebaseAuth.instance.currentUser
+                                ?.updateDisplayName(_username.text);
+                            print("Created new account");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Login_screen()));
+                          }).onError((error, stackTrace) {
+                            print("Error ${error.toString()}");
+                          });
+                          ;
                         }
-                        FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                          email: _emailcontroller.text,
-                          password: _passwordcontroller.text,
-                        )
-                            .then((value) {
-                          FirebaseAuth.instance.currentUser
-                              ?.updateDisplayName(_username.text);
-                          print("Created new account");
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Login_screen()));
-                        }).onError((error, stackTrace) {
-                          print("Error ${error.toString()}");
-                        });
                       },
                       child: const Text(
                         "Sign Up",

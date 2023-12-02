@@ -78,7 +78,7 @@ class _ProfileState extends State<Profile_screen> {
                       ),
                       child: Text(
                         '$name',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
@@ -90,11 +90,11 @@ class _ProfileState extends State<Profile_screen> {
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: hexStringToColor("BB3B93"),
-                        fixedSize: Size(double.maxFinite, 50),
+                        fixedSize: const Size(double.maxFinite, 50),
                       ),
                       child: Text(
                         '$_email',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
@@ -137,7 +137,7 @@ class _ProfileState extends State<Profile_screen> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Login_screen()));
+                                                      const Login_screen()));
                                         },
                                         child: const Text(
                                           "Ok",

@@ -250,7 +250,7 @@ class _Setting_screenState extends State<Setting_screen> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const Profile_screen()));
+                                                        Setting_screen()));
                                           },
                                           child: const Text(
                                             "Ok",

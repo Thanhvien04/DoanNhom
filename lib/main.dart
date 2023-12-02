@@ -1,6 +1,9 @@
 import 'package:doan/Screen/profile_screen.dart';
+import 'package:doan/Screen/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'Screen/forget_screen.dart';
+import 'Screen/home_screen.dart';
 import 'Screen/login_screen.dart';
 
 void main() async {
@@ -25,32 +28,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          // '/': (context) => HomePage(),
-          '/profile': (context) => Profile_screen(),
-          // '/settings': (context) => SettingsPage(),
-        },
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const Login_screen()
-        // debugShowCheckedModeBanner: false,
-        // title: 'Flutter Demo',
-        // theme: ThemeData(
-        //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        //   useMaterial3: true,
-        // ),
-        // initialRoute: '/',
-        // routes: {
-        //   '/': (context) => const Home_Screen(),
-        //   '/forget': (context) => const ForgetPassword_Screen(),
-        //   '/login': (context) => const Login_screen(),
-        //   '/signup': (context) => const Signup_screen(),
-        // },
-        );
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: '/login',
+      routes: {
+        '/': (context) => const Home_Screen(),
+        '/forget': (context) => const ForgetPassword_Screen(),
+        '/login': (context) => const Login_screen(),
+        '/signup': (context) => const Signup_screen(),
+      },
+    );
   }
 }

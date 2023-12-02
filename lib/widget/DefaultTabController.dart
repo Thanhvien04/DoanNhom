@@ -66,81 +66,83 @@ class _defaultTabControllerState extends State<defaultTabController> {
     bool flag = false;
     final response = await FirebaseDatabase.instance.ref().child("room").get();
     for (DataSnapshot room in response.children) {
-      if (int.parse(room.child("id").value.toString()) == id_room) {
-        var lst_device = [];
-        for (i = 0; i < room.child("lstDevice").children.length; i++) {
-          var dv1 = {
-            "id": int.parse(room
-                .child("lstDevice")
-                .child("$i")
-                .child("id")
-                .value
-                .toString()),
-            "stt": bool.parse(room
-                .child("lstDevice")
-                .child("$i")
-                .child("stt")
-                .value
-                .toString()),
-            "name": room
-                .child("lstDevice")
-                .child("$i")
-                .child("name")
-                .value
-                .toString(),
-            "img": room
-                .child("lstDevice")
-                .child("$i")
-                .child("img")
-                .value
-                .toString(),
-            "id_room": int.parse(room
-                .child("lstDevice")
-                .child("$i")
-                .child("id_room")
-                .value
-                .toString()),
-            "delete": bool.parse(room
-                .child("lstDevice")
-                .child("$i")
-                .child("delete")
-                .value
-                .toString())
-          };
-          lst_device.add(dv1);
-        }
-        lst_device.forEach((device) {
-          if (device["delete"] == true) {
-            if (device["name"] == val) {
-              if (!flag) {
-                device["delete"] = false.toString();
-                flag = true;
+      if (room.key != "firealarm") {
+        if (int.parse(room.child("id").value.toString()) == id_room) {
+          var lst_device = [];
+          for (i = 0; i < room.child("lstDevice").children.length; i++) {
+            var dv1 = {
+              "id": int.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("id")
+                  .value
+                  .toString()),
+              "stt": bool.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("stt")
+                  .value
+                  .toString()),
+              "name": room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("name")
+                  .value
+                  .toString(),
+              "img": room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("img")
+                  .value
+                  .toString(),
+              "id_room": int.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("id_room")
+                  .value
+                  .toString()),
+              "delete": bool.parse(room
+                  .child("lstDevice")
+                  .child("$i")
+                  .child("delete")
+                  .value
+                  .toString())
+            };
+            lst_device.add(dv1);
+          }
+          lst_device.forEach((device) {
+            if (device["delete"] == true) {
+              if (device["name"] == val) {
+                if (!flag) {
+                  device["delete"] = false.toString();
+                  flag = true;
+                }
               }
             }
+          });
+          if (!flag) {
+            var dv = {
+              "id": room.child("lstDevice").children.length,
+              "stt": false,
+              "name": val,
+              "img": val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
+              "id_room": int.parse(room.child("id").value.toString()),
+              "delete": false
+            };
+            setState(() {
+              lst_device.add(dv);
+            });
           }
-        });
-        if (!flag) {
-          var dv = {
-            "id": room.child("lstDevice").children.length,
-            "stt": false,
-            "name": val,
-            "img": val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
-            "id_room": int.parse(room.child("id").value.toString()),
-            "delete": false
-          };
-          setState(() {
-            lst_device.add(dv);
+          var ref =
+              await FirebaseDatabase.instance.ref().child("room/${id_room}");
+          ref.child("lstDevice").set(lst_device).then((lstdevice) {
+            print('Thêm thiết bị thành công');
+            flag = false;
+          }).catchError((onError) {
+            print('Thêm thiết bị không thành công');
+            flag = false;
           });
         }
-        var ref =
-            await FirebaseDatabase.instance.ref().child("room/${id_room}");
-        ref.child("lstDevice").set(lst_device).then((lstdevice) {
-          print('Thêm thiết bị thành công');
-          flag = false;
-        }).catchError((onError) {
-          print('Thêm thiết bị không thành công');
-          flag = false;
-        });
       }
     }
   }
@@ -169,9 +171,7 @@ class _defaultTabControllerState extends State<defaultTabController> {
             length: widget.lst_room.length,
             child: Column(children: [
               TabBar(
-                tabs: widget.lst_room
-                    .map((e) => Text(e.name))
-                    .toList(),
+                tabs: widget.lst_room.map((e) => Text(e.name)).toList(),
                 isScrollable: true,
               ),
               Container(
