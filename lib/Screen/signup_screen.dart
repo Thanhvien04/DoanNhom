@@ -186,23 +186,23 @@ class _Signup_screenState extends State<Signup_screen> {
                             password: _passwordcontroller.text,
                           );
                         }
-                         FirebaseAuth.instance
-                             .createUserWithEmailAndPassword(
-                           email: _emailcontroller.text,
-                           password: _passwordcontroller.text,
-                         )
-                      //       .then((value) {
-                      //     FirebaseAuth.instance.currentUser
-                      //         ?.updateDisplayName(_username.text);
-                      //     print("Created new account");
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => Login_screen()));
-                      //   }).onError((error, stackTrace) {
-                      //     print("Error ${error.toString()}");
-                      //   });
-                      // },
+                        FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: _emailcontroller.text,
+                          password: _passwordcontroller.text,
+                        )
+                            .then((value) {
+                          FirebaseAuth.instance.currentUser
+                              ?.updateDisplayName(_username.text);
+                          print("Created new account");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Login_screen()));
+                        }).onError((error, stackTrace) {
+                          print("Error ${error.toString()}");
+                        });
+                      },
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
