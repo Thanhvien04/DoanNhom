@@ -5,6 +5,7 @@ import 'package:doan/widget/bottomnaviga.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:vibration/vibration.dart';
 import '../models/device.dart';
 import '../models/room.dart';
 
@@ -235,12 +236,14 @@ class _Home_ScreenState extends State<Home_Screen> {
         }
       } else {
         baoChay = bool.parse(room.value.toString());
-        print(baoChay);
       }
       if (flag == false) {
         setState(() {
           lstRoom = [];
         });
+      }
+      if (baoChay) {
+        Vibration.vibrate();
       }
     }
   }
@@ -321,229 +324,237 @@ class _Home_ScreenState extends State<Home_Screen> {
   Widget build(BuildContext context) {
     loadRoom();
     return !baoChay
-        ? Scaffold(
-            appBar: AppBar(
-                title: const Text('Trang chủ'),
-                backgroundColor: Colors.blue,
-                automaticallyImplyLeading: false),
-            bottomNavigationBar: const BottomNav(
-              idx: 0,
-            ),
-            body: SingleChildScrollView(
-              child: Column(children: [
-                defaultTabController(
-                  lst_room: lstRoom,
-                  roomIsEmpty: roomIsEmpty,
-                  callback: () {},
+        ? SafeArea(
+            child: Scaffold(
+                appBar: AppBar(
+                    title: const Text('Trang chủ'),
+                    backgroundColor: Colors.grey,
+                    automaticallyImplyLeading: false),
+                bottomNavigationBar: const BottomNav(
+                  idx: 0,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 10),
-                      width: MediaQuery.of(context).size.width / 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.7,
-                            child: MaterialButton(
-                              height: 40,
-                              onPressed: () {
-                                var ref = FirebaseDatabase.instance
-                                    .ref()
-                                    .child("room");
-                                ref
-                                    .child("firealarm")
-                                    .set(!baoChay)
-                                    .then((value) {
-                                  print('Báo cháy thành công');
-                                }).catchError((onError) {
-                                  print('Báo cháy không thành công');
-                                });
-                              },
-                              color: Colors.red,
-                              child: const Text('Báo cháy'),
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.7,
-                            child: MaterialButton(
-                              height: 40,
-                              onPressed: () {
-                                turnOffAllLights();
-                              },
-                              color: Colors.blue,
-                              child: const Text('Tắt hết đèn'),
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.7,
-                            child: MaterialButton(
-                              height: 40,
-                              onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Thêm phòng'),
-                                  content: TextField(
-                                    controller: txt_RoomName,
-                                    decoration: const InputDecoration(
-                                      labelText: "Nhập tên phòng",
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        if (txt_RoomName.text.isNotEmpty) {
-                                          addRoom(Room(
-                                              delete: false,
-                                              id: lstRoom.length,
-                                              lstDevice: addListDevice(
-                                                  getIDRoom(txt_RoomName.text)),
-                                              name: txt_RoomName.text));
-                                          roomIsEmpty = false;
-                                        }
-                                      },
-                                      child: const Text('Thêm'),
-                                    ),
-                                  ],
+                body: SingleChildScrollView(
+                  child: Column(children: [
+                    defaultTabController(
+                      lst_room: lstRoom,
+                      roomIsEmpty: roomIsEmpty,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 2.7,
+                                child: MaterialButton(
+                                  height: 40,
+                                  onPressed: () {
+                                    var ref = FirebaseDatabase.instance
+                                        .ref()
+                                        .child("room");
+                                    ref
+                                        .child("firealarm")
+                                        .set(!baoChay)
+                                        .then((value) {
+                                      print('Báo cháy thành công');
+                                    }).catchError((onError) {
+                                      print('Báo cháy không thành công');
+                                    });
+                                  },
+                                  color: Colors.red,
+                                  child: const Text('Báo cháy'),
                                 ),
                               ),
-                              color: Colors.blue,
-                              child: const Text('Thêm phòng'),
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.7,
-                            child: MaterialButton(
-                              height: 40,
-                              onPressed: () {
-                                lstRoom.length != 0
-                                    ? showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text('Xóa phòng'),
-                                          content: SizedBox(
-                                            height: 100,
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                children: lstRoom
-                                                    .map((room) =>
-                                                        lstRoomDel(room))
-                                                    .toList(),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 2.7,
+                                child: MaterialButton(
+                                  height: 40,
+                                  onPressed: () {
+                                    turnOffAllLights();
+                                  },
+                                  color: Colors.blue,
+                                  child: const Text('Tắt hết đèn'),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 2.7,
+                                child: MaterialButton(
+                                  height: 40,
+                                  onPressed: () => showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text('Thêm phòng'),
+                                      content: TextField(
+                                        controller: txt_RoomName,
+                                        decoration: const InputDecoration(
+                                          labelText: "Nhập tên phòng",
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            if (txt_RoomName.text.isNotEmpty) {
+                                              addRoom(Room(
+                                                  delete: false,
+                                                  id: lstRoom.length,
+                                                  lstDevice: addListDevice(
+                                                      getIDRoom(
+                                                          txt_RoomName.text)),
+                                                  name: txt_RoomName.text));
+                                              roomIsEmpty = false;
+                                            }
+                                          },
+                                          child: const Text('Thêm'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  color: Colors.blue,
+                                  child: const Text('Thêm phòng'),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 2.7,
+                                child: MaterialButton(
+                                  height: 40,
+                                  onPressed: () {
+                                    lstRoom.isNotEmpty
+                                        ? showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              title: const Text('Xóa phòng'),
+                                              content: SizedBox(
+                                                height: 100,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: lstRoom
+                                                        .map((room) =>
+                                                            lstRoomDel(room))
+                                                        .toList(),
+                                                  ),
+                                                ),
                                               ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    });
+                                                  },
+                                                  child: const Text('OK'),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  Navigator.of(context).pop();
-                                                });
-                                              },
-                                              child: const Text('OK'),
+                                          )
+                                        : showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              title: const Text('Xóa phòng'),
+                                              content: const SizedBox(
+                                                height: 100,
+                                                child: Text(
+                                                    'Không có phòng để xóa'),
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    });
+                                                  },
+                                                  child: const Text('OK'),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      )
-                                    : showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text('Xóa phòng'),
-                                          content: const SizedBox(
-                                            height: 100,
-                                            child:
-                                                Text('Không có phòng để xóa'),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  Navigator.of(context).pop();
-                                                });
-                                              },
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                              },
-                              color: Colors.blue,
-                              child: const Text('Xóa phòng'),
-                            ),
+                                          );
+                                  },
+                                  color: Colors.blue,
+                                  child: const Text('Xóa phòng'),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.2,
+                          child: Column(children: [
+                            const Text('Tốc độ quạt'),
+                            Slider(
+                              value: _currentSliderValue,
+                              max: 100,
+                              divisions: 100,
+                              label: _currentSliderValue.round().toString(),
+                              onChanged: (double value) {
+                                setState(() {
+                                  _currentSliderValue = value;
+                                });
+                              },
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 2.2,
+                              height: 100,
+                              color: Colors.black12,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                    children: lstRoom
+                                        .map((room) => Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: room.lstDevice
+                                                .map((device) => Text(
+                                                      device.id != 0
+                                                          ? '${device.name} ${room.name.toLowerCase()} ${device.stt ? ': ON' : ': OFF'}'
+                                                          : '',
+                                                      style: const TextStyle(
+                                                          fontSize: 10),
+                                                    ))
+                                                .toList()))
+                                        .toList()),
+                              ),
+                            )
+                          ]),
+                        ),
+                      ],
+                    )
+                  ]),
+                )),
+          )
+        : SafeArea(
+            child: Scaffold(
+              backgroundColor: Colors.red,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Nhà bạn đang cháy"),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.7,
+                      child: MaterialButton(
+                        height: 40,
+                        onPressed: () {
+                          var ref =
+                              FirebaseDatabase.instance.ref().child("room");
+                          ref.child("firealarm").set(!baoChay).then((value) {
+                            print('Báo cháy thành công');
+                          }).catchError((onError) {
+                            print('Báo cháy không thành công');
+                          });
+                        },
+                        color: Colors.white,
+                        child: const Text('Tắt báo cháy'),
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.2,
-                      child: Column(children: [
-                        const Text('Tốc độ quạt'),
-                        Slider(
-                          value: _currentSliderValue,
-                          max: 100,
-                          divisions: 100,
-                          label: _currentSliderValue.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
-                          },
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 2.2,
-                          height: 100,
-                          color: Colors.black12,
-                          child: SingleChildScrollView(
-                            child: Column(
-                                children: lstRoom
-                                    .map((room) => Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: room.lstDevice
-                                            .map((device) => Text(
-                                                  device.id != 0
-                                                      ? '${device.name} ${room.name.toLowerCase()} ${device.stt ? ': ON' : ': OFF'}'
-                                                      : '',
-                                                  style: const TextStyle(
-                                                      fontSize: 10),
-                                                ))
-                                            .toList()))
-                                    .toList()),
-                          ),
-                        )
-                      ]),
-                    ),
                   ],
-                )
-              ]),
-            ))
-        : Scaffold(
-            backgroundColor: Colors.red,
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Nhà bạn đang cháy"),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2.7,
-                    child: MaterialButton(
-                      height: 40,
-                      onPressed: () {
-                        var ref = FirebaseDatabase.instance.ref().child("room");
-                        ref.child("firealarm").set(!baoChay).then((value) {
-                          print('Báo cháy thành công');
-                        }).catchError((onError) {
-                          print('Báo cháy không thành công');
-                        });
-                      },
-                      color: Colors.white,
-                      child: const Text('Tắt báo cháy'),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           );
@@ -556,14 +567,93 @@ class _Home_ScreenState extends State<Home_Screen> {
         Text(room.name),
         IconButton(
             onPressed: () {
-              var delete = FirebaseDatabase.instance
-                  .ref()
-                  .child('room/${room.id}')
-                  .update({"delete": true}).then((value) {
-                print("Xóa phòng thành công");
-              }).catchError((onError) {
-                print('Xóa phòng không thành công');
-              });
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Xóa phòng'),
+                  content: SizedBox(
+                    height: 100,
+                    child: Text('Bạn muốn xóa phòng ${room.name}?'),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          var delete = FirebaseDatabase.instance
+                              .ref()
+                              .child('room/${room.id}')
+                              .update({"delete": true.toString()}).then(
+                                  (value) {
+                            lstRoom.remove(room);
+                            print(lstRoom.length);
+                            print("Xóa phòng thành công");
+                          }).catchError((onError) {
+                            print('Xóa phòng không thành công');
+                          });
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        });
+                        lstRoom.isNotEmpty
+                            ? showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Xóa phòng'),
+                                  content: SizedBox(
+                                    height: 100,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: lstRoom
+                                            .map((room) => lstRoomDel(room))
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          Navigator.of(context).pop();
+                                        });
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Xóa phòng'),
+                                  content: const SizedBox(
+                                    height: 100,
+                                    child: Text('Không có phòng để xóa'),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          Navigator.of(context).pop();
+                                        });
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                      },
+                      child: const Text('Có'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: const Text('Không'),
+                    ),
+                  ],
+                ),
+              );
             },
             icon: const Icon(Icons.close)),
       ],

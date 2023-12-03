@@ -44,171 +44,186 @@ class _Login_screenState extends State<Login_screen> {
     return Color(int.parse(hexColor, radix: 16));
   }
 
+  bool isObscureText = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          hexStringToColor("CB2B93"),
-          hexStringToColor("9546c4"),
-          hexStringToColor("5E66F6"),
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+    return SafeArea(
+      child: Scaffold(
+        body: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
             child: Column(
               children: [
-                Image.asset(
-                  "asset/nha.png",
-                  fit: BoxFit.fitWidth,
-                  height: 350,
-                  width: 500,
-                ),
-                SizedBox(
+                Image.asset("asset/nha.png",
+                    fit: BoxFit.fitWidth,
+                    height: 250,
+                    width: MediaQuery.of(context).size.width),
+                const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  controller: _email,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: "Enter Email",
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.9)),
-                      fillColor: Colors.white.withOpacity(0.3),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: const BorderSide(
-                              width: 0,
-                              color: Colors.white,
-                              style: BorderStyle.none)),
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.white70,
-                      )),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _password,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: "Enter Password",
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.9)),
-                      fillColor: Colors.white.withOpacity(0.3),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: const BorderSide(
-                              width: 0,
-                              color: Colors.white,
-                              style: BorderStyle.none)),
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        color: Colors.white70,
-                      )),
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Text(
-                  value,
-                  style: const TextStyle(
-                      color: Colors.red, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 1,
-                ),
-                ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.white70)),
-                    onPressed: () async {
-                      User? user = await loginUsingEmailPassword(
-                          email: _email.text,
-                          password: _password.text,
-                          context: context);
-                      print(user);
-                      print("$_email");
-                      print("$_password");
-                      if (user != null) {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const Home_Screen()));
-                      } else {
-                        setState(() {
-                          value = "Username or Password not Invalible !!";
-                        });
-                        print("Username or Password not Invalible !!");
-                      }
-                      ;
-                    },
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    )),
-                const SizedBox(
-                  height: 30,
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyPhone()));
-                  },
-                  child: const Text(
-                    "Log in with SMS",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                forgetPassword(context),
                 Padding(
-                  padding: const EdgeInsets.only(right: 30, top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
                     children: [
-                      const Text(
-                        "Do you have an accout ?",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      TextFormField(
+                        controller: _email,
+                        cursorColor: Colors.white,
+                        decoration: InputDecoration(
+                            filled: true,
+                            labelText: "Enter Email",
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            fillColor: Colors.white.withOpacity(0.3),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                                borderSide: const BorderSide(
+                                    width: 0,
+                                    color: Colors.white,
+                                    style: BorderStyle.none)),
+                            prefixIcon: const Icon(
+                              Icons.person,
+                            )),
                       ),
                       const SizedBox(
-                        width: 10,
+                        height: 20,
+                      ),
+                      TextFormField(
+                        obscureText: isObscureText,
+                        controller: _password,
+                        cursorColor: Colors.white,
+                        decoration: InputDecoration(
+                            suffixIcon: isObscureText
+                                ? IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        isObscureText = !isObscureText;
+                                      });
+                                    },
+                                    icon: const Icon(Icons.visibility_off))
+                                : IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        isObscureText = !isObscureText;
+                                      });
+                                    },
+                                    icon: const Icon(Icons.visibility)),
+                            filled: true,
+                            labelText: "Enter Password",
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            fillColor: Colors.white.withOpacity(0.3),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                                borderSide: const BorderSide(
+                                    width: 0,
+                                    color: Colors.white,
+                                    style: BorderStyle.none)),
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                            )),
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        value,
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 1,
+                      ),
+                      ElevatedButton(
+                          style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.white70)),
+                          onPressed: () async {
+                            User? user = await loginUsingEmailPassword(
+                                email: _email.text,
+                                password: _password.text,
+                                context: context);
+                            print(user);
+                            print("$_email");
+                            print("$_password");
+                            if (user != null) {
+                              // ignore: use_build_context_synchronously
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Home_Screen()));
+                            } else {
+                              setState(() {
+                                value = "Username or Password not Invalible !!";
+                              });
+                              print("Username or Password not Invalible !!");
+                            }
+                            ;
+                          },
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          )),
+                      const SizedBox(
+                        height: 30,
                       ),
                       InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Signup_screen()));
+                                  builder: (context) => const MyPhone()));
                         },
-                        child: RichText(
-                          text: const TextSpan(
-                              text: "Sign up",
+                        child: const Text(
+                          "Log in with SMS",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      forgetPassword(context),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 30, top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Text(
+                              "Do you have an accout ?",
                               style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16)),
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Signup_screen()));
+                              },
+                              child: RichText(
+                                text: const TextSpan(
+                                    text: "Sign up",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16)),
+                              ),
+                            )
+                          ],
                         ),
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -237,7 +252,6 @@ class _Login_screenState extends State<Login_screen> {
                     decoration: TextDecoration.underline,
                     decorationColor: Colors.red,
                     decorationStyle: TextDecorationStyle.solid,
-                    backgroundColor: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 16)),
           ),

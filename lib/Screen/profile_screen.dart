@@ -41,133 +41,137 @@ class _ProfileState extends State<Profile_screen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar:const BottomNav(idx: 1,),
-          body: Container(
+          bottomNavigationBar: const BottomNav(
+            idx: 1,
+          ),
+          body: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                hexStringToColor("CB2B93"),
-                hexStringToColor("9546c4"),
-                hexStringToColor("5E66F6"),
-              ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
               child: SingleChildScrollView(
-                  child: Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Setting_screen()));
-                    },
-                    child: const CircleAvatar(
-                      radius: 150,
-                      backgroundImage: AssetImage("asset/h2.png"),
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: hexStringToColor("BB3B93"),
-                        fixedSize: const Size(double.maxFinite, 50),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Setting_screen()));
+                      },
+                      child: const CircleAvatar(
+                        radius: 150,
+                        backgroundImage: AssetImage("asset/h2.png"),
                       ),
-                      child: Text(
-                         '$name',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      )),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: hexStringToColor("BB3B93"),
-                        fixedSize: const Size(double.maxFinite, 50),
-                      ),
-                      child: Text(
-                         '$_email',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      )),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Row(children: [
-                                  Icon(
-                                    Icons.warning_amber,
-                                    color: Colors.redAccent,
-                                  ),
-                                  Text(
-                                    " Warning!",
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: hexStringToColor("BB3B93"),
+                          fixedSize: const Size(double.maxFinite, 50),
+                        ),
+                        child: Text(
+                          '$name',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        )),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: hexStringToColor("BB3B93"),
+                          fixedSize: const Size(double.maxFinite, 50),
+                        ),
+                        child: Text(
+                          '$_email',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        )),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Row(children: [
+                                    Icon(
+                                      Icons.warning_amber,
+                                      color: Colors.redAccent,
+                                    ),
+                                    Text(
+                                      " Warning!",
+                                      style: TextStyle(
+                                          color: Colors.redAccent,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                    ),
+                                  ]),
+                                  content: const Text(
+                                    "Do you really want to be exported?",
                                     style: TextStyle(
-                                        color: Colors.redAccent,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 25),
+                                        fontSize: 15),
                                   ),
-                                ]),
-                                content: const Text(
-                                  "Do you really want to be exported?",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                                actions: <Widget>[
-                                  Row(children: [
-                                    const Padding(padding: EdgeInsets.all(10)),
-                                    TextButton(
+                                  actions: <Widget>[
+                                    Row(children: [
+                                      const Padding(
+                                          padding: EdgeInsets.all(10)),
+                                      TextButton(
+                                          onPressed: () {
+                                            signOut();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Login_screen()));
+                                          },
+                                          child: const Text(
+                                            "Ok",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          )),
+                                      const Padding(
+                                          padding: EdgeInsets.all(25)),
+                                      TextButton(
                                         onPressed: () {
-                                          signOut();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const Login_screen()));
+                                          Navigator.of(context).pop();
                                         },
                                         child: const Text(
-                                          "Ok",
+                                          'Close',
                                           style: TextStyle(color: Colors.black),
-                                        )),
-                                    const Padding(padding: EdgeInsets.all(25)),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text(
-                                        'Close',
-                                        style: TextStyle(color: Colors.black),
+                                        ),
                                       ),
-                                    ),
-                                  ])
-                                ],
-                              );
-                            });
-                      },
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size.fromHeight(50)),
-                      child: const Text(
-                        "Sign out",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ))
-                ],
+                                    ])
+                                  ],
+                                );
+                              });
+                        },
+                        style: ElevatedButton.styleFrom(
+                            fixedSize: const Size.fromHeight(50)),
+                        child: const Text(
+                          "Sign out",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        ))
+                  ],
+                ),
               )))),
     );
   }

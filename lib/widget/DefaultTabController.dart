@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import '../models/room.dart';
 
 class defaultTabController extends StatefulWidget {
-  defaultTabController(
-      {super.key,
-      required this.lst_room,
-      required this.roomIsEmpty,
-      required this.callback});
+  defaultTabController({
+    super.key,
+    required this.lst_room,
+    required this.roomIsEmpty,
+  });
   final List<Room> lst_room;
   final bool roomIsEmpty;
-  VoidCallback callback;
   @override
   State<defaultTabController> createState() => _defaultTabControllerState();
 }
@@ -123,11 +122,11 @@ class _defaultTabControllerState extends State<defaultTabController> {
           if (!flag) {
             var dv = {
               "id": room.child("lstDevice").children.length,
-              "stt": false,
+              "stt": false.toString(),
               "name": val,
               "img": val == "Đèn" ? 'asset/light.png' : 'asset/fan.png',
               "id_room": int.parse(room.child("id").value.toString()),
-              "delete": false
+              "delete": false.toString()
             };
             setState(() {
               lst_device.add(dv);
@@ -175,12 +174,7 @@ class _defaultTabControllerState extends State<defaultTabController> {
                 isScrollable: true,
               ),
               Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  hexStringToColor("CB2B93"),
-                  hexStringToColor("9546c4"),
-                  hexStringToColor("5E66F6"),
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+                color: Colors.black12,
                 height: 350,
                 child: TabBarView(
                     children: widget.lst_room.map((e) => room(e)).toList()),
@@ -217,7 +211,7 @@ class _defaultTabControllerState extends State<defaultTabController> {
                         .child("room/${device.id_room}/lstDevice");
                     ref
                         .child("${device.id}")
-                        .update({"stt": !_va}).then((value) {
+                        .update({"stt": (!_va).toString()}).then((value) {
                       print("Dổi trạng thái nút thành công1");
                     }).catchError((onError) {
                       print("Dổi trạng thái nút không thành công thành côn1");
@@ -256,9 +250,8 @@ class _defaultTabControllerState extends State<defaultTabController> {
                               var ref = FirebaseDatabase.instance
                                   .ref()
                                   .child("room/${device.id_room}");
-                              ref
-                                  .child("lstDevice/${device.id}")
-                                  .update({"stt": value}).then((value) {
+                              ref.child("lstDevice/${device.id}").update(
+                                  {"stt": value.toString()}).then((value) {
                                 print("Dổi trạng thái nút thành công");
                               }).catchError((onError) {
                                 print(
@@ -280,7 +273,8 @@ class _defaultTabControllerState extends State<defaultTabController> {
                               .ref()
                               .child(
                                   'room/${device.id_room}/lstDevice/${device.id}')
-                              .update({"delete": true}).then((value) {
+                              .update({"delete": true.toString()}).then(
+                                  (value) {
                             print("Xóa thành công");
                           }).catchError((onError) {
                             print('Xóa không thành công');
