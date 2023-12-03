@@ -77,7 +77,7 @@ class _ProfileState extends State<Profile_screen> {
                         fixedSize: const Size(double.maxFinite, 50),
                       ),
                       child: Text(
-                         '$name',
+                        '$name',
                         style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class _ProfileState extends State<Profile_screen> {
                         fixedSize: const Size(double.maxFinite, 50),
                       ),
                       child: Text(
-                         '$_email',
+                        '$_email',
                         style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

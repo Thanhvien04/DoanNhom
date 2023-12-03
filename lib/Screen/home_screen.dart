@@ -5,6 +5,7 @@ import 'package:doan/widget/bottomnaviga.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:vibration/vibration.dart';
 import '../models/device.dart';
 import '../models/room.dart';
 
@@ -122,12 +123,17 @@ class _Home_ScreenState extends State<Home_Screen> {
                       .child("id")
                       .value
                       .toString()),
-                  stt: bool.parse(room
+                  // stt: bool.parse(room
+                  //     .child("lstDevice")
+                  //     .child("$i")
+                  //     .child("stt")
+                  //     .value
+                  //     .toString()),
+                  stt: room
                       .child("lstDevice")
                       .child("$i")
-                      .child("stt")
-                      .value
-                      .toString()),
+                      .child("name")
+                      .value==0?false:true,
                   name: room
                       .child("lstDevice")
                       .child("$i")
@@ -236,6 +242,9 @@ class _Home_ScreenState extends State<Home_Screen> {
       } else {
         baoChay = bool.parse(room.value.toString());
         print(baoChay);
+        if (baoChay) {
+          Vibration.vibrate(duration: 1000);
+        }
       }
       if (flag == false) {
         setState(() {
@@ -534,9 +543,9 @@ class _Home_ScreenState extends State<Home_Screen> {
                       onPressed: () {
                         var ref = FirebaseDatabase.instance.ref().child("room");
                         ref.child("firealarm").set(!baoChay).then((value) {
-                          print('Báo cháy thành công');
+                          print('Tắt báo cháy thành công');
                         }).catchError((onError) {
-                          print('Báo cháy không thành công');
+                          print('Tắt báo cháy không thành công');
                         });
                       },
                       color: Colors.white,
