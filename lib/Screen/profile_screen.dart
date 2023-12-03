@@ -3,6 +3,7 @@ import 'package:doan/Screen/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../widget/bottomnaviga.dart';
 import 'login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +41,7 @@ class _ProfileState extends State<Profile_screen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        bottomNavigationBar:const BottomNav(idx: 1,),
           body: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
