@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile_screen> {
                       },
                       child: const CircleAvatar(
                         radius: 150,
-                        backgroundImage: AssetImage("asset/h2.png"),
+                        backgroundImage: AssetImage("asset/vien.jpg"),
                       ),
                     ),
                     const SizedBox(
@@ -73,13 +73,13 @@ class _ProfileState extends State<Profile_screen> {
                     ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: hexStringToColor("BB3B93"),
+                          backgroundColor: Colors.white,
                           fixedSize: const Size(double.maxFinite, 50),
                         ),
                         child: Text(
                           '$name',
                           style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         )),
@@ -89,13 +89,13 @@ class _ProfileState extends State<Profile_screen> {
                     ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: hexStringToColor("BB3B93"),
+                          backgroundColor: Colors.white,
                           fixedSize: const Size(double.maxFinite, 50),
                         ),
                         child: Text(
                           '$_email',
                           style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         )),
@@ -111,7 +111,7 @@ class _ProfileState extends State<Profile_screen> {
                                   title: const Row(children: [
                                     Icon(
                                       Icons.warning_amber,
-                                      color: Colors.redAccent,
+                                      color: Colors.black,
                                     ),
                                     Text(
                                       " Warning!",

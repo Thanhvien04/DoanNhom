@@ -49,11 +49,10 @@ class _Setting_screenState extends State<Setting_screen> {
     }
   }
 
-  bool _obscureText = true;
   hexStringToColor(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
-      hexColor = "FF$hexColor";
+      hexColor = "FF" + hexColor;
     }
     return Color(int.parse(hexColor, radix: 16));
   }
@@ -63,15 +62,6 @@ class _Setting_screenState extends State<Setting_screen> {
     return SafeArea(
       child: Scaffold(
           body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              hexStringToColor("CB2B93"),
-              hexStringToColor("9546c4"),
-              hexStringToColor("5E66F6"),
-            ],
-          ),
-        ),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -88,7 +78,7 @@ class _Setting_screenState extends State<Setting_screen> {
                 else
                   const CircleAvatar(
                     radius: 120,
-                    backgroundImage: AssetImage('asset/h2.png'),
+                    backgroundImage: AssetImage('asset/vien.jpg'),
                   ),
                 ElevatedButton(
                     child: const Text(
@@ -174,65 +164,105 @@ class _Setting_screenState extends State<Setting_screen> {
                   const Padding(padding: EdgeInsets.all(30)),
                   ElevatedButton(
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Row(children: [
-                                  Icon(
-                                    Icons.warning_amber,
-                                    color: Colors.redAccent,
+                        if (_username.text.isEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Vui lòng nhập đầy đủ thông tin'),
+                                  icon: const Icon(
+                                    Icons.warning,
+                                    color: Colors.red,
+                                    size: 50,
                                   ),
-                                  Text(
-                                    " Warning!",
-                                    style: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                                ]),
-                                content: const Text(
-                                  "Are you sure about this change ?",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                                actions: <Widget>[
-                                  Row(children: [
-                                    const Padding(padding: EdgeInsets.all(10)),
-                                    TextButton(
+                                  actions: [
+                                    SizedBox(
+                                      width: 300,
+                                      height: 50,
+                                      child: FloatingActionButton(
                                         onPressed: () {
-                                                FirebaseAuth.instance
-                                                    .setSettings()
-                                                    .then((value) {
-                                                  FirebaseAuth.instance.currentUser
-                                                      ?.updateDisplayName(
-                                                          _username.text);
-                                                });
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const Profile_screen()));
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Setting_screen()));
                                         },
+                                        backgroundColor: Colors.white,
                                         child: const Text(
                                           "Ok",
-                                          style: TextStyle(color: Colors.black),
-                                        )),
-                                    const Padding(padding: EdgeInsets.all(25)),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text(
-                                        'Close',
-                                        style: TextStyle(color: Colors.black),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
+                                    )
+                                  ],
+                                );
+                              });
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Row(children: [
+                                    Icon(
+                                      Icons.warning_amber,
+                                      color: Colors.red,
                                     ),
-                                  ])
-                                ],
-                              );
-                            });
+                                    Text(
+                                      " Warning!",
+                                      style: TextStyle(
+                                          color: Colors.redAccent,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                    ),
+                                  ]),
+                                  content: const Text(
+                                    "Are you sure about this change ?",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                  actions: <Widget>[
+                                    Row(children: [
+                                      const Padding(
+                                          padding: EdgeInsets.all(10)),
+                                      TextButton(
+                                          onPressed: () {
+                                            FirebaseAuth.instance
+                                                .setSettings()
+                                                .then((value) {
+                                              FirebaseAuth.instance.currentUser
+                                                  ?.updateDisplayName(
+                                                      _username.text);
+                                            });
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Setting_screen()));
+                                          },
+                                          child: const Text(
+                                            "Ok",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          )),
+                                      const Padding(
+                                          padding: EdgeInsets.all(25)),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          'Close',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                    ])
+                                  ],
+                                );
+                              });
+                        }
                       },
                       style: const ButtonStyle(
                         backgroundColor:
