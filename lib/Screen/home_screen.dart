@@ -26,6 +26,8 @@ hexStringToColor(String hexColor) {
   return Color(int.parse(hexColor, radix: 16));
 }
 
+int roomlength = 0;
+int roomlengthcurrent = 0;
 bool roomIsEmpty = true;
 TextEditingController txt_RoomName = TextEditingController();
 List<Room> lstRoom = [];
@@ -424,58 +426,8 @@ class _Home_ScreenState extends State<Home_Screen> {
                                   height: 40,
                                   onPressed: () {
                                     lstRoom.isNotEmpty
-                                        ? showDialog<String>(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                              title: const Text('Xóa phòng'),
-                                              content: SizedBox(
-                                                height: 100,
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    children: lstRoom
-                                                        .map((room) =>
-                                                            lstRoomDel(room))
-                                                        .toList(),
-                                                  ),
-                                                ),
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    });
-                                                  },
-                                                  child: const Text('OK'),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : showDialog<String>(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                              title: const Text('Xóa phòng'),
-                                              content: const SizedBox(
-                                                height: 100,
-                                                child: Text(
-                                                    'Không có phòng để xóa'),
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    });
-                                                  },
-                                                  child: const Text('OK'),
-                                                ),
-                                              ],
-                                            ),
-                                          );
+                                        ? showDialogDelRoom(context)
+                                        : showDialogNoRoom(context);
                                   },
                                   color: Colors.blue,
                                   child: const Text('Xóa phòng'),
@@ -560,6 +512,7 @@ class _Home_ScreenState extends State<Home_Screen> {
           );
   }
 
+  List<Room> lstRoomNew = [];
   Row lstRoomDel(Room room) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -578,68 +531,17 @@ class _Home_ScreenState extends State<Home_Screen> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
-                        setState(() {
-                          var delete = FirebaseDatabase.instance
-                              .ref()
-                              .child('room/${room.id}')
-                              .update({"delete": true.toString()}).then(
-                                  (value) {
-                            lstRoom.remove(room);
-                            print(lstRoom.length);
-                            print("Xóa phòng thành công");
-                          }).catchError((onError) {
-                            print('Xóa phòng không thành công');
-                          });
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                        var delete = FirebaseDatabase.instance
+                            .ref()
+                            .child('room/${room.id}')
+                            .update({"delete": true.toString()}).then((value) {
+                          print("Xóa phòng thành công");
+                        }).catchError((onError) {
+                          print('Xóa phòng không thành công');
                         });
-                        lstRoom.isNotEmpty
-                            ? showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Xóa phòng'),
-                                  content: SizedBox(
-                                    height: 100,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: lstRoom
-                                            .map((room) => lstRoomDel(room))
-                                            .toList(),
-                                      ),
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          Navigator.of(context).pop();
-                                        });
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Xóa phòng'),
-                                  content: const SizedBox(
-                                    height: 100,
-                                    child: Text('Không có phòng để xóa'),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          Navigator.of(context).pop();
-                                        });
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                        lstRoomNew = lstRoom;
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       },
                       child: const Text('Có'),
                     ),
@@ -657,6 +559,56 @@ class _Home_ScreenState extends State<Home_Screen> {
             },
             icon: const Icon(Icons.close)),
       ],
+    );
+  }
+
+  Future<String?> showDialogNoRoom(BuildContext context) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Xóa phòng'),
+        content: const SizedBox(
+          height: 100,
+          child: Text('Không có phòng để xóa'),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              setState(() {
+                Navigator.of(context).pop();
+              });
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<String?> showDialogDelRoom(BuildContext context) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Xóa phòng'),
+        content: SizedBox(
+          height: 100,
+          child: SingleChildScrollView(
+            child: Column(
+              children: lstRoom.map((room) => lstRoomDel(room)).toList(),
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              setState(() {
+                Navigator.of(context).pop();
+              });
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 }
