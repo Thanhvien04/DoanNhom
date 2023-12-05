@@ -1,11 +1,7 @@
 import 'dart:io';
-
-import 'package:doan/Screen/phone.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-import 'otp_screen.dart';
 
 class Signup_screen extends StatefulWidget {
   const Signup_screen({super.key});

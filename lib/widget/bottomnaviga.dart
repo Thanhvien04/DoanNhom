@@ -1,3 +1,4 @@
+import 'package:doan/Screen/home_screen.dart';
 import 'package:doan/Screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +43,8 @@ class _BottomNavState extends State<BottomNav> {
         if (indexOfItem == 0) {
           if (widget.idx != 0) {
             Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const Home_Screen()));
           }
         }
         if (indexOfItem == 1) {

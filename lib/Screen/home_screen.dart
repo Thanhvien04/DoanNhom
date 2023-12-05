@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:doan/widget/DefaultTabController.dart';
 import 'package:doan/widget/bottomnaviga.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,11 +77,11 @@ class _Home_ScreenState extends State<Home_Screen> {
         (device) {
           var dv = {
             "id": device.id,
-            "stt": device.stt,
+            "stt": device.stt.toString(),
             "name": device.name,
             "img": device.img,
             "id_room": device.id_room,
-            "delete": device.delete
+            "delete": device.delete.toString()
           };
           lst_device.add(dv);
         },
@@ -267,7 +265,7 @@ class _Home_ScreenState extends State<Home_Screen> {
       "name": room.name,
       "lstDevice": list_device,
       "id": room.id,
-      "delete": room.delete
+      "delete": room.delete.toString()
     };
     bool flag = false;
     final response = await FirebaseDatabase.instance.ref().child("room").get();
@@ -360,7 +358,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                                         .child("room");
                                     ref
                                         .child("firealarm")
-                                        .set(!baoChay)
+                                        .set((!baoChay).toString())
                                         .then((value) {
                                       print('Báo cháy thành công');
                                     }).catchError((onError) {
@@ -495,7 +493,10 @@ class _Home_ScreenState extends State<Home_Screen> {
                         onPressed: () {
                           var ref =
                               FirebaseDatabase.instance.ref().child("room");
-                          ref.child("firealarm").set(!baoChay).then((value) {
+                          ref
+                              .child("firealarm")
+                              .set((!baoChay).toString())
+                              .then((value) {
                             print('Báo cháy thành công');
                           }).catchError((onError) {
                             print('Báo cháy không thành công');

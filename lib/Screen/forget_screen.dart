@@ -1,3 +1,4 @@
+import 'package:doan/Screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -90,7 +91,8 @@ class _ForgetPassword_ScreenState extends State<ForgetPassword_Screen> {
                       ),
                       TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/login');
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const Login_screen()));
                           },
                           child: const Text(
                             'Trở về trang đăng nhập',

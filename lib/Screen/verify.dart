@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
+import 'login_screen.dart';
+
 class MyVerify extends StatefulWidget {
   const MyVerify({Key? key}) : super(key: key);
 
@@ -87,9 +89,6 @@ class _MyVerifyState extends State<MyVerify> {
               ),
               Pinput(
                 length: 6,
-                // defaultPinTheme: defaultPinTheme,
-                // focusedPinTheme: focusedPinTheme,
-                // submittedPinTheme: submittedPinTheme,
                 onChanged: (value) {
                   code = value;
                 },
@@ -113,7 +112,8 @@ class _MyVerifyState extends State<MyVerify> {
                             PhoneAuthProvider.credential(
                                 verificationId: MyPhone.verify, smsCode: code);
                         await auth.signInWithCredential(credential);
-                        Navigator.pushNamed(context, "/login");
+                       Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const Login_screen()));
                       } catch (e) {
                         print("Wrong Otp");
                       }

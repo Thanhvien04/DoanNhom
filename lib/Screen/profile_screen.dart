@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:doan/Screen/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 import '../widget/bottomnaviga.dart';
 import 'login_screen.dart';
